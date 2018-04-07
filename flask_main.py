@@ -5,7 +5,7 @@ from flask import g
 from flask import render_template
 from flask import request
 from flask import url_for
-
+from PIL import Image
 import json
 import logging
 
@@ -55,7 +55,7 @@ except:
 def index():
     app.logger.debug("Main page entry")
     # TODO: Get Mural data from db to send to client
-    return flask.render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route("/mural")
@@ -64,13 +64,10 @@ def mural():
     pass
 
 
-@app.route("/submit_mural", methods = ['GET', 'POST'])
+@app.route("/submit_mural")
 def submit_mural():
-    app.loger.debug("Submit Mural page entry")
-    if request.method == 'POST':
-        image = request.files['file']
-        print(image)
-        return 'file uploaded successfully'
+    app.logger.debug("Submit Mural page entry")
+    return render_template("submit_mural.html")
     #title = request.form['title']
     #address = request.form['address']
     #description = request.form['description']
@@ -83,6 +80,15 @@ def submit_mural():
     # pass
 
 
+@app.route("/_submit_photo", methods = ['GET', 'POST'])
+def submit_photo():
+    if request.method == 'POST':
+        image = request.files['file']
+        im = Image.open(image)
+        print(image)
+        return render_template("submit_mural.html", message=im)
+
+
 @app.route("/admin_login")
 def admin_login():
     # TODO: DO LAST
@@ -92,7 +98,7 @@ def admin_login():
 @app.route("/create")
 def create():
     app.logger.debug("Create")
-    return flask.render_template('create.html')
+    return render_template('create.html')
 
 
 @app.route("/_get_location")
@@ -138,7 +144,7 @@ def upload_selfie():
 
     test = {"type": "selfie", "mural": mural_name}
     collection.insert(test)
-    return flask.render_template('index.html')
+    return render_template('index.html')
 
 
 @app.errorhandler(404)

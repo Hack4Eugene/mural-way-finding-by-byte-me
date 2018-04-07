@@ -1,12 +1,54 @@
 <!DOCTYPE html>
 <html>
+	<!--
+		Noah Palmer, Jeanie Chen
+		||WEBSITE LOCATION||
+
+		
+
+	-->
 	<head>
-		<title>Mural</title>
-		<link rel="stylesheet" type="text/css" href="../css/submit_mural.css">
+		<link rel="stylesheet" type="text/css" href="../css/index.css">
 		<meta charset="UTF-8">
+		<title>Index</title>
 		<script src="../library/jquery.js"></script>
+		<script src="../library/p5.js"></script>
+		<script src="../library/p5.dom.js"></script>
+
 	</head>
+
 	<body>
+		<div><h1>Welcome to Mural Wayfinder</h1></div>
+		<form action = "_submit_photo" method = "POST" 
+			enctype = "multipart/form-data">
+			<input type = "file" name = "file" />
+			<input type = "submit"/>
+		</form>
+		<img src="{{ message }}" alt="User Image">
+		<!--
+		<div id="show_image"></div>
+		<button id="submit">Submit</button>
+		-->
+		<!--Got this input file command from https://developers.google.com/web/fundamentals/media/capturing-images/-->
+		<!--
+		<input type="file" accept="image/*" id="file-input">
+		<script>
+			$("#submit").click(function(){
+				//Grab the Image
+
+				//Set div "show_image" to given image
+			});
+
+			const fileInput = document.getElementById("file-input");
+			fileInput.addEventListener('change', (e) => doSomething(e.target.files));
+
+
+			function doSomething(photo){
+
+				
+			}
+		</script>
+		-->
 	</body>
 
 </html>
