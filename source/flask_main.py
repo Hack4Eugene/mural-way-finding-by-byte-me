@@ -1,9 +1,11 @@
 
 import flask
+import sys
 from flask import g
 from flask import render_template
 from flask import request
 from flask import url_for
+from sklearn.metrics.pairwise import euclidean_distances
 
 import json
 import logging
@@ -67,6 +69,17 @@ def mural():
 
 @app.route("/submit_mural")
 def submit_mural():
+    app.loger.debug("Submit Mural page entry")
+    image = request.form['image']
+    title = request.form['title']
+    address = request.form['address']
+    description = request.form['description']
+    # TODO:
+    # Get lat/long(double)
+    # Call method to add database using form information above
+    # Number of Visits
+
+
     # TODO: call submit mural form
     pass
 
@@ -88,22 +101,45 @@ def get_location():
     app.logger.debug("Get Location")
     pass
 
-@app.route("/_set_order")
-def set_order():
+@app.route("/_get_images")
+def get_images():
     # Pulls Mural data from mongo and sets order
     # TODO: This may not work
-    long = request.args.get('long', 0, type=double)
-    lat = request.args.get('lat', 0, type=double)
+    long = request.args.get('long', 0, type=float)
+    lat = request.args.get('lat', 0, type=float)
 
+    long_lat = [long, lat]
+
+    records = []
+
+    #TODO limit calling the entire DB
     if long is None or lat is None:
         # TODO: Fix to catch error
-        # TODO: Get request from DB
-        pass
+        for record in collection.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
+            record['name'] = arrow.get(record['name']).isoformat()
+            #TODO image logic
+            records.append(record)
 
-    # TODO: Get request from DB
-    pass
+        records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
+    else:
+        for record in collection.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
+            record['mural_name'] = arrow.get(record['mural_name']).isoformat()
+            #TODO image logic
+            records.append(record)
+        #TODO edit to sort by euclidean distance
+        records = sorted(records, key=lambda k: k['long_lat'], reverse=True)
 
-@app.route()
+    return records
+
+@app.route("/_upload_selfie")
+def upload_selfie():
+    # TODO: Upload picture to separate
+    # http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
+    mural_name = request.args.get('mural_name', 0, type=str)
+
+    test = {"type": "selfie", "mural": mural_name}
+    collection.insert(test)
+    return flask.render_template('index.html')
 
 
 @app.errorhandler(404)
@@ -115,12 +151,11 @@ def page_not_found(error):
 
 def euclid_dist():
     # TODO: Use to sort by distance
+    # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.euclidean_distances.html
     pass
 
-def upload_selfie():
-    # TODO: Upload picture to separate
 
 if __name__ == "__main__":
     app.debug=CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
-    app.run(port=CONFIG.PORT,host="0.0.0.0")
+    app.run(port=CONFIG.PORT, host="0.0.0.0")
