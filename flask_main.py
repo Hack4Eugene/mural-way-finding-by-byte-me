@@ -1,26 +1,21 @@
-import flask
+import io
+import logging
 import sys
 import uuid
-import aux_funcs
-from flask import g
+
+import boto3
+import flask
+# Mongo database
+import pymongo
+from PIL import Image
+from botocore.client import Config
 from flask import render_template
 from flask import request
 from flask import url_for
-from PIL import Image, ImageFile
-import json
-import logging
-import latlong_helper as llh # read_file_lat_long(input_file)
-import boto3
-from botocore.client import Config
-import io
-
-# Mongo database
-from pymongo import MongoClient
-import pymongo
-# for use removing _ids
-from bson.objectid import ObjectId
 
 from credentials import *
+
+# for use removing _ids
 
 
 mongo_uri = "mongodb://{}:{}@{}"
@@ -60,7 +55,6 @@ try:
     dbclient = MongoClient(MONGO_CLIENT_URL)
     db = getattr(dbclient, secrets.client_secrets.db)
     collection = db.dated
-
 except:
     print("Failure opening database.  Is Mongo running? Correct password?")
     sys.exit(1)
@@ -125,30 +119,9 @@ def submit_photo():
 
 @app.route("/admin_login")
 def admin_login():
-    input_id = flask.request.form['username']
-    input_pw = flask.request.form['password']
-    b_pw = input_pw.encode('UTF-8')  ###string needs to be in form: b'string'
-	
-	admin = credentais[]
-    
-	if admin is None:
-        print("Error: Meeting Not found")
-        flask.g.iderror = True
-        return render_template()
-    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
-        print('password checked successfully')
-	else:
-        print('password incorrect!!!')
-        flask.g.passerror = True
-        return render_template()
-    #Probably want to set this as false at the beggining
-	flask.session["admin_status"] = True
-    return render_template()
+    # TODO: DO LAST
+    pass
 
-@app.route("/logout")
-def logout():
-	flask.session["admin_status"] = False
-	
 
 @app.route("/create")
 def create():
