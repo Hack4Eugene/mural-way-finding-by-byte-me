@@ -5,9 +5,13 @@ from flask import g
 from flask import render_template
 from flask import request
 from flask import url_for
-from PIL import Image
+from PIL import Image, ImageFile
 import json
 import logging
+import latlong_helper as llh # read_file_lat_long(input_file)
+import boto3
+from botocore.client import Config
+import io
 
 # Mongo database
 from pymongo import MongoClient
@@ -83,10 +87,21 @@ def submit_mural():
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
     if request.method == 'POST':
-        image = request.files['file']
-        im = Image.open(image)
-        print(image)
-        return render_template("submit_mural.html", message=im)
+        im = request.files['file']
+        im = Image.open(im)
+        in_mem_file = io.BytesIO()
+        im.save(in_mem_file, format="JPEG")
+        s3 = boto3.resource(
+            's3',
+            aws_access_key_id='',
+            aws_secret_access_key='',
+            config=Config(signature_version='s3v4')
+        )
+
+        # Image Uploaded
+        s3.Bucket('muralwayfinderimages').put_object(Key='murals/test.jpeg', Body=in_mem_file.getvalue(), ACL='public-read')
+
+        return render_template("submit_mural.html", bucketsrc="https://s3-us-west-2.amazonaws.com/muralwayfinderimages/murals/test.jpeg")
 
 
 @app.route("/admin_login")
