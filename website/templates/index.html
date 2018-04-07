@@ -19,10 +19,17 @@
 
 	<body>
 		<div><h1>Welcome to Mural Wayfinder</h1></div>
+		<form action = "mural.html" method = "POST" 
+			enctype = "multipart/form-data">
+			<input type = "file" name = "file" />
+			<input type = "submit"/>
+		</form>
+		<!--
 		<div id="show_image"></div>
 		<button id="submit">Submit</button>
-
+		-->
 		<!--Got this input file command from https://developers.google.com/web/fundamentals/media/capturing-images/-->
+		<!--
 		<input type="file" accept="image/*" id="file-input">
 		<script>
 			$("#submit").click(function(){
@@ -36,9 +43,11 @@
 
 
 			function doSomething(photo){
-				console.log(photo);
+
+				
 			}
 		</script>
+		-->
 	</body>
 
 </html>
