@@ -5,9 +5,13 @@ from flask import g
 from flask import render_template
 from flask import request
 from flask import url_for
-from PIL import Image
+from PIL import Image, ImageFile
 import json
 import logging
+import latlong_helper as llh # read_file_lat_long(input_file)
+import boto3
+from botocore.client import Config
+import io
 
 # Mongo database
 from pymongo import MongoClient
@@ -15,14 +19,29 @@ import pymongo
 # for use removing _ids
 from bson.objectid import ObjectId
 
-'''
-import secrets.admin_secrets
-import secrets.client_secrets
-MONGO_CLIENT_URL = "mongodb+srv://{}:{}@{}".format(
-    secrets.client_secrets.db_user,
-    secrets.client_secrets.db_user_pw,
-    secrets.client_secrets.db)
-'''
+from credentials import *
+
+
+mongo_uri = "mongodb://{}:{}@{}"
+connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
+
+db = connection.test
+print(db)
+print(type(connection.main.Mural))
+result = connection.main.Mural.insert_one({"test":"test"})
+print(connection.main.Mural.find_one())
+
+try:
+    db = connection.test
+    print(db)
+    print(type(connection.main.Mural))
+    #result = connection.main.Mural.insert_one({"test": "test"})
+    #print(connection.main.Mural.find_one())
+    mural_table = db.Mural.find({})
+
+except:
+    print("Failure opening database.  Is Mongo running? Correct password?")
+    sys.exit(1)
 
 ###
 # Globals
@@ -83,10 +102,21 @@ def submit_mural():
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
     if request.method == 'POST':
-        image = request.files['file']
-        im = Image.open(image)
-        print(image)
-        return render_template("submit_mural.html", message=im)
+        im = request.files['file']
+        im = Image.open(im)
+        in_mem_file = io.BytesIO()
+        im.save(in_mem_file, format="JPEG")
+        s3 = boto3.resource(
+            's3',
+            aws_access_key_id='',
+            aws_secret_access_key='',
+            config=Config(signature_version='s3v4')
+        )
+
+        # Image Uploaded
+        s3.Bucket('muralwayfinderimages').put_object(Key='murals/test.jpeg', Body=in_mem_file.getvalue(), ACL='public-read')
+
+        return render_template("submit_mural.html", bucketsrc="https://s3-us-west-2.amazonaws.com/muralwayfinderimages/murals/test.jpeg")
 
 
 @app.route("/admin_login")
@@ -121,13 +151,13 @@ def get_images():
     # TODO limit calling the entire DB
     if long is None or lat is None:
         # TODO: Fix to catch error
-        for record in collection.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
+        for record in mural_table.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
             # TODO image logic
             records.append(record)
 
         records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
     else:
-        for record in collection.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
+        for record in mural_table.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
             # TODO image logic
             records.append(record)
         # TODO edit to sort by euclidean distance
