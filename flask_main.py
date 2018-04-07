@@ -108,8 +108,8 @@ def submit_photo():
         im.save(in_mem_file, format="JPEG")
         s3 = boto3.resource(
             's3',
-            aws_access_key_id='',
-            aws_secret_access_key='',
+            aws_access_key_id = AWSAccessKeyId,
+            aws_secret_access_key = AWSSecretKey,
             config=Config(signature_version='s3v4')
         )
 
@@ -121,9 +121,30 @@ def submit_photo():
 
 @app.route("/admin_login")
 def admin_login():
-    # TODO: DO LAST
-    pass
+    input_id = flask.request.form['username']
+    input_pw = flask.request.form['password']
+    b_pw = input_pw.encode('UTF-8')  ###string needs to be in form: b'string'
+	
+	admin = credentais[]
+    
+	if admin is None:
+        print("Error: Meeting Not found")
+        flask.g.iderror = True
+        return render_template()
+    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
+        print('password checked successfully')
+	else:
+        print('password incorrect!!!')
+        flask.g.passerror = True
+        return render_template()
+    #Probably want to set this as false at the beggining
+	flask.session["admin_status"] = True
+    return render_template()
 
+@app.route("/logout")
+def logout():
+	flask.session["admin_status"] = False
+	
 
 @app.route("/create")
 def create():
