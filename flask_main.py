@@ -108,8 +108,8 @@ def submit_photo():
         im.save(in_mem_file, format="JPEG")
         s3 = boto3.resource(
             's3',
-            aws_access_key_id='',
-            aws_secret_access_key='',
+            aws_access_key_id = AWSAccessKeyId,
+            aws_secret_access_key = AWSSecretKey,
             config=Config(signature_version='s3v4')
         )
 
