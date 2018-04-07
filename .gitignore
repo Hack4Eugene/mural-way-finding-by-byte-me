@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 secrets/client_secrets.py
 secrets/admin_secrets.py
+.DS_Store
 __pycache__/
 *.py[cod]
 credentials.ini
