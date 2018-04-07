@@ -129,22 +129,16 @@ def admin_login():
     
 	if admin is None:
         print("Error: Meeting Not found")
-        #TODOflask.g.iderror = True
-        #flask.g.login_meeting = True
+        flask.g.iderror = True
         return render_template()
     if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
         print('password checked successfully')
 	else:
         print('password incorrect!!!')
-        #flask.g.passerror = True
-        #flask.g.login_meeting = True
+        flask.g.passerror = True
         return render_template()
     #Probably want to set this as false at the beggining
 	flask.session["admin_status"] = True
-    #flask.session['invitees'] = meeting['invitees']
-    #flask.session['organizer_email'] = meeting['email']
-    #*meeting is just a copy so we still have to push these invitess to the db later
-    #flask.session['meeting_id'] = input_id
     return render_template()
 
 @app.route("/logout")
