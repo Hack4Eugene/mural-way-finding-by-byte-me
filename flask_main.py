@@ -15,14 +15,17 @@ import pymongo
 # for use removing _ids
 from bson.objectid import ObjectId
 
-'''
-import secrets.admin_secrets
-import secrets.client_secrets
-MONGO_CLIENT_URL = "mongodb+srv://{}:{}@{}".format(
-    secrets.client_secrets.db_user,
-    secrets.client_secrets.db_user_pw,
-    secrets.client_secrets.db)
-'''
+from credentials import *
+
+
+mongo_uri = "mongodb://{}:{}@{}"
+connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
+
+db = connection.test
+print(db)
+print(type(connection.main.Mural))
+result = connection.main.Mural.insert_one({"test":"test"})
+print(connection.main.Mural.find_one())
 
 ###
 # Globals
