@@ -111,14 +111,12 @@ def get_images():
     if long is None or lat is None:
         # TODO: Fix to catch error
         for record in collection.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
-            record['name'] = arrow.get(record['name']).isoformat()
             # TODO image logic
             records.append(record)
 
         records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
     else:
         for record in collection.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
-            record['mural_name'] = arrow.get(record['mural_name']).isoformat()
             # TODO image logic
             records.append(record)
         # TODO edit to sort by euclidean distance
