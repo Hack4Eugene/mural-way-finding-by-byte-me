@@ -85,9 +85,36 @@ def submit_mural():
 
 @app.route("/admin_login")
 def admin_login():
-    # TODO: DO LAST
-    pass
+    input_id = flask.request.form['username']
+    input_pw = flask.request.form['password']
+    b_pw = input_pw.encode('UTF-8')  ###string needs to be in form: b'string'
+	
+	admin = credentais[]
+    
+	if admin is None:
+        print("Error: Meeting Not found")
+        #TODOflask.g.iderror = True
+        #flask.g.login_meeting = True
+        return render_template()
+    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
+        print('password checked successfully')
+	else:
+        print('password incorrect!!!')
+        #flask.g.passerror = True
+        #flask.g.login_meeting = True
+        return render_template()
+    #Probably want to set this as false at the beggining
+	flask.session["admin_status"] = True
+    #flask.session['invitees'] = meeting['invitees']
+    #flask.session['organizer_email'] = meeting['email']
+    #*meeting is just a copy so we still have to push these invitess to the db later
+    #flask.session['meeting_id'] = input_id
+    return render_template()
 
+@app.route("/logout")
+def logout():
+	flask.session["admin_status"] = False
+	
 
 @app.route("/create")
 def create():
