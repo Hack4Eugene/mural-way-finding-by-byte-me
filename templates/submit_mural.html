@@ -17,6 +17,7 @@
 
 	<body>
 		<div><h1>Welcome to Mural Wayfinder</h1></div>
+		<!--
 		<form action = "_submit_photo" method = "POST" 
 			enctype = "multipart/form-data">
 			<input type = "file" name = "file" />
@@ -24,30 +25,13 @@
 		</form>
 		
 		<img src="{{bucketsrc}}" class="img-responsive"/>
-		<!--
-		<div id="show_image"></div>
-		<button id="submit">Submit</button>
 		-->
-		<!--Got this input file command from https://developers.google.com/web/fundamentals/media/capturing-images/-->
-		<!--
-		<input type="file" accept="image/*" id="file-input">
-		<script>
-			$("#submit").click(function(){
-				//Grab the Image
 
-				//Set div "show_image" to given image
-			});
-
-			const fileInput = document.getElementById("file-input");
-			fileInput.addEventListener('change', (e) => doSomething(e.target.files));
-
-
-			function doSomething(photo){
-
-				
-			}
-		</script>
-		-->
+		<form method="POST" action="/admin_login" id="admin_form">
+			<input type="text" placeholder="Mural Title" id="mural_title"><br>
+			<input type="text" placeholder="Description" id="description"><br>
+			<input type="file" accept="image/*" id="file-input">	
+		</form>
 	</body>
 
 </html>
