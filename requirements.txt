@@ -1,0 +1,7 @@
+#PIP Requirements file
+#USE: pip install -r requirements.txt
+
+pymongo
+dnspython
+bcrypt
+Flask
