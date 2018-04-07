@@ -7,3 +7,7 @@ DB_DOMAIN = "cluster0-shard-00-00-eouik.mongodb.net:27017,cluster0-shard-00-01-e
 
 AWSAccessKeyId = 'AKIAJKNTY5AMTWSHWWMQ'
 AWSSecretKey = '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'
+
+#Admin user/pass
+ADMIN_ID = "admin"
+ADMIN_PW = "password"
