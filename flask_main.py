@@ -1,5 +1,6 @@
 import flask
 import sys
+import uuid
 import aux_funcs
 from flask import g
 from flask import render_template
@@ -87,9 +88,7 @@ def mural():
 def submit_mural():
     app.logger.debug("Submit Mural page entry")
     return render_template("submit_mural.html")
-    #title = request.form['title']
-    #address = request.form['address']
-    #description = request.form['description']
+
     # TODO:
     # Get lat/long(double)
     # Call method to add database using form information above
@@ -102,6 +101,9 @@ def submit_mural():
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
     if request.method == 'POST':
+        #title = request.form['title']
+        #address = request.form['address']
+        #description = request.form['description']
         im = request.files['file']
         im = Image.open(im)
         in_mem_file = io.BytesIO()
@@ -114,9 +116,11 @@ def submit_photo():
         )
 
         # Image Uploaded
-        s3.Bucket('muralwayfinderimages').put_object(Key='murals/test.jpeg', Body=in_mem_file.getvalue(), ACL='public-read')
+        rng_str = 'murals/{}.jpeg'.format(str(uuid.uuid4()))
+        bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
+        s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
 
-        return render_template("submit_mural.html", bucketsrc="https://s3-us-west-2.amazonaws.com/muralwayfinderimages/murals/test.jpeg")
+        return render_template("submit_mural.html", bucketsrc=bucket_str)
 
 
 @app.route("/admin_login")
