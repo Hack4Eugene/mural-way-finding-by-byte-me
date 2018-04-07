@@ -6,3 +6,5 @@ dnspython
 bcrypt
 Flask
 exifread
+boto3
+bson
