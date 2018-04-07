@@ -14,13 +14,15 @@ from pymongo import MongoClient
 import pymongo
 # for use removing _ids
 from bson.objectid import ObjectId
+
+'''
 import secrets.admin_secrets
 import secrets.client_secrets
-
 MONGO_CLIENT_URL = "mongodb+srv://{}:{}@{}".format(
     secrets.client_secrets.db_user,
     secrets.client_secrets.db_user_pw,
     secrets.client_secrets.db)
+'''
 
 ###
 # Globals
@@ -28,12 +30,12 @@ MONGO_CLIENT_URL = "mongodb+srv://{}:{}@{}".format(
 import CONFIG
 
 app = flask.Flask(__name__)
-app.secret_key = CONFIG.secret_key
+#app.secret_key = CONFIG.secret_key
 
 ####
 # Database connection per server process
 ###
-
+'''
 try:
     dbclient = MongoClient(MONGO_CLIENT_URL)
     db = getattr(dbclient, secrets.client_secrets.db)
@@ -42,7 +44,7 @@ try:
 except:
     print("Failure opening database.  Is Mongo running? Correct password?")
     sys.exit(1)
-
+'''
 
 ###
 # Pages
@@ -62,20 +64,23 @@ def mural():
     pass
 
 
-@app.route("/submit_mural")
+@app.route("/submit_mural", methods = ['GET', 'POST'])
 def submit_mural():
     app.loger.debug("Submit Mural page entry")
-    image = request.form['image']
-    title = request.form['title']
-    address = request.form['address']
-    description = request.form['description']
+    if request.method == 'POST':
+        image = request.files['file']
+        print(image)
+        return 'file uploaded successfully'
+    #title = request.form['title']
+    #address = request.form['address']
+    #description = request.form['description']
     # TODO:
     # Get lat/long(double)
     # Call method to add database using form information above
     # Number of Visits
 
     # TODO: call submit mural form
-    pass
+    # pass
 
 
 @app.route("/admin_login")
@@ -145,6 +150,6 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    app.debug = CONFIG.DEBUG
+    #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
     app.run(port=CONFIG.PORT, host="0.0.0.0")
