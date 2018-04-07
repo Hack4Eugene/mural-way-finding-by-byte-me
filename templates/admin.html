@@ -14,8 +14,10 @@
 	</head>
 	<body>
 		<div><h1>Log in to Mural Wayfinder</h1></div>
-		User Name: <input type="text" placeholder="User Name" id="username">
-		Password: <input type="password" placeholder="Password" id="password">
+		<form method="POST" action="/admin_login" id="admin_form">
+			<input type="text" placeholder="User Name" id="username"><br>
+			<input type="password" placeholder="Password" id="password">
+		</form>
 		<button id="login">Log In</button>
 
 		<script>
