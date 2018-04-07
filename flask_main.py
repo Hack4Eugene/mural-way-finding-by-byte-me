@@ -27,6 +27,18 @@ print(type(connection.main.Mural))
 result = connection.main.Mural.insert_one({"test":"test"})
 print(connection.main.Mural.find_one())
 
+try:
+    db = connection.test
+    print(db)
+    print(type(connection.main.Mural))
+    #result = connection.main.Mural.insert_one({"test": "test"})
+    #print(connection.main.Mural.find_one())
+    mural_table = db.Mural.find({})
+
+except:
+    print("Failure opening database.  Is Mongo running? Correct password?")
+    sys.exit(1)
+
 ###
 # Globals
 ###
@@ -124,13 +136,13 @@ def get_images():
     # TODO limit calling the entire DB
     if long is None or lat is None:
         # TODO: Fix to catch error
-        for record in collection.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
+        for record in mural_table.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
             # TODO image logic
             records.append(record)
 
         records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
     else:
-        for record in collection.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
+        for record in mural_table.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
             # TODO image logic
             records.append(record)
         # TODO edit to sort by euclidean distance
