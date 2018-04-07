@@ -21,7 +21,7 @@ def add_mural(db,name,address,description,image):
 	@param      description  The description
 	@param      image        The image
 
-	@return     { description_of_the_return_value }
+	@return     None, updates the database with a new mural entry
 	"""
 
 	entry = {
