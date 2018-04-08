@@ -86,8 +86,6 @@ def submit_photo():
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
 
-        return render_template("submit_mural.html", bucketsrc=bucket_str)
-
 
 @app.route("/admin_login")
 def admin_login():
