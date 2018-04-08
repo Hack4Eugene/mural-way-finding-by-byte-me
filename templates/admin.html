@@ -33,12 +33,17 @@
 
 			<!--Review Mural-->
 			<h2>Review Murals</h2>
-			<div></div>
+			<div>
+				<img src={{result.mural.img_id}} alt="User Image" style="border: none; width: 100%;">
+				<br>
+			</div>
 
 			<!--Review Selfie-->
 			<h2>Review Selfie</h2>
-			<div></div>
-			
+			<div>
+				<img src={{result.selfie.img_id}} alt="User Image" style="border: none; width: 100%;">
+				<br>
+			</div>
 
 			<form method="POST" action="/logout" id="logout" name='placeholder'>
 				<input type="submit" value="Log Out">
