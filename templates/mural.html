@@ -17,6 +17,11 @@
 		<img style="border:none; width:100%;" src="{{ mural_instance.img_id }}" alt="User Image">
 		<img>
 		<p>{{ mural_instance.description }}</p>
+
+		<form action="_upload_selfie" method="POST" enctype = "multipart/form-data">
+			<input type="file" accept="image/*" name="file"/><br>
+            <input type="submit" id="submit" value="Submit Selfie"/>
+		</form>
 		<button>Submit Selfie</button>
 
 		<script>
@@ -24,5 +29,6 @@
               location.href = "/";
              }
 		</script>
+
 	</body>
 </html>
