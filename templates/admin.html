@@ -33,24 +33,24 @@
 
 			<!--Review Mural-->
 			<h2>Review Murals</h2>
-			
+			{% if session["next_mural"] != None %}
 			<div>
-				<img src={{result.mural.img_id}} alt="User Image" style="border: none; width: 100%;">
+				<img src={{session["next_mural"]}} alt="User Image" style="border: none; width: 100%;">
 				<br>
 			</div>
-
+			{% endif %}
 			<form method="POST" action="/review" id="mural_form" name='mural_form'>
 				<input type="submit" name="mural_t" value="Approve">
 				<input type="submit" name="mural_f" value="Deny">
 			</form>
 			<!--Review Selfie-->
 			<h2>Review Selfie</h2>
-
+			{% if session["next_mural"] != None %}
 			<div>
-				<img src={{result.selfie.img_id}} alt="User Image" style="border: none; width: 100%;">
+				<img src={{session["next_mural"]}} alt="User Image" style="border: none; width: 100%;">
 				<br>
 			</div>
-
+			{% endif %}
 			<form method="POST" action="/review" id="selfie_form" name='selfie_form'>
 				<input type="submit" name="selfie_t" value="Approve">
 				<input type="submit" name="selfie_f" value="Deny">
