@@ -1,5 +1,4 @@
 import pymongo
-import boto3
 from aux_funcs import euclidean
 from bson import ObjectId
 from bson import objectid
@@ -100,6 +99,7 @@ def process_selfie(db, is_approved, aws_url):
             db["Mural"].update_one({"img_id":mural_id},{'$set':{"selfies":selfies}})
 
     else:
+        pass
         # ADD AWS DELETION
     return None
 
