@@ -1,26 +1,31 @@
 import pymongo
+from aux_funcs import euclidean
+from bson import ObjectId
 
 
 def sorted_list(db, lon, lat):
     records = []
 
-    # TODO limit calling the entire DB
     if lon is None or lat is None:
-        for record in mural_table.find({}).sort("name", pymongo.ASCENDING):
+        for record in db.Mural.find({}).limit(30):
             records.append(record)
-
-        records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
+        records = sorted(records, key=lambda k: k['name'], reverse=True)
+        records = [x["img_id"] for x in records]
     else:
-        for record in mural_table.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
-            # TODO image logic
-            records.append(record)
-        # TODO edit to sort by euclidean distance
-        records = sorted(records, key=lambda k: k['long_lat'], reverse=True)
+        for record in db.Mural.find({"type": "mural"}).limit(30):
+            dist = euclidean([lon,lat], [record["lon"],record["lat"]])
+            records.append(record, dist)
+        records = sorted(records, key=lambda k: k[1], reverse=True)
+        records = [x[0]["img_id"] for x in records]
+
+    return records
+
 
 def add_image(db, aws_url):
     return
 
-def add_mural(db,name,address,description,image):
+
+def add_mural(db,name,address,artist,description,image):
     """
     @brief      Adds a new mural to the database
 
@@ -37,6 +42,7 @@ def add_mural(db,name,address,description,image):
         "name": name,
         "lat": lat,
         "lon": lon,
+        "artist": artist,
         "address": address,
         "description": description,
         "pageload": 0,
