@@ -13,8 +13,9 @@ def sorted_list(db, lon=None, lat=None):
         records = sorted(records, key=lambda k: k['name'], reverse=True)
     else:
         for record in db.Mural.find({"type": "mural"}).limit(30):
-            dist = euclidean([lon,lat], [record["lon"],record["lat"]])
-            records.append(record, dist)
+            if record["lon"] and record["lat"]:
+                dist = euclidean([lon,lat], [record["lon"],record["lat"]])
+                records.append(record, dist)
         records = sorted(records, key=lambda k: k[1], reverse=True)
         records = [x[0] for x in records]
 
