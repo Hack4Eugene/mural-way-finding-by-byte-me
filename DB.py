@@ -1,13 +1,11 @@
 import pymongo
 import boto3
-import boto
 from aux_funcs import euclidean
 from bson import ObjectId
 from bson import objectid
 from credentials import *
 from botocore.client import Config
-from boto.s3.connection import S3Connection, Bucket, Key
-from boto.s3.key import Key
+
 
 
 def sorted_list(db, lon=None, lat=None):
@@ -102,13 +100,7 @@ def process_selfie(db, is_approved, aws_url):
             db["Mural"].update_one({"img_id":mural_id},{'$set':{"selfies":selfies}})
 
     else:
-        conn = boto.connect_s3(AWSAccessKeyId, AWSSecretKey)
-        bucket = conn.get_bucket('muralwayfinderimages')
-        b = Bucket(conn, 'muralwayfinderimages').delete_key("murals/" + mural_id.split('/')[-1])
-        b.delete_key(k)
-        print("murals/" + mural_id.split('/')[-1])
-        # Delete the Selfie from the AdminSelfieQ after it has been processed
-        db["AdminSelfieQ"].remove({"img_id":aws_url})
+        # ADD AWS DELETION
     return None
 
 
