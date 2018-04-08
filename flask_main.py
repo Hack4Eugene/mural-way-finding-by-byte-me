@@ -116,8 +116,8 @@ def test():
 
 @app.route("/admin",methods=["POST","GET"])
 def admin():
-    result = {flask.session['next_mural'],flask.session['next_selfie']}
-    return render_template("admin.html",result=result)
+    # result = {flask.session['next_mural'],flask.session['next_selfie']}
+    return render_template("admin.html")
 
 @app.route("/admin_login", methods = ['POST', 'GET'])
 def admin_login():
@@ -144,9 +144,18 @@ def admin_login():
         print('password checked successfully')
         flask.session["admin_status"] = True
         
-        flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
-        flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
-        
+        next_mural = DB.get_mural_queue(db)
+        if next_mural:
+            flask.session["next_mural"] = next_mural["img_id"]
+        else:
+            flask.session["next_mural"] = None
+
+        next_selfie = DB.get_selfie_queue(db)
+        if next_selfie:
+            flask.session["next_selfie"] = next_selfie["img_id"]
+        else:
+            flask.session["next_selfie"] = None
+
         flask.g.login_screen = False
         return flask.redirect(flask.url_for("admin"))
     else:
@@ -166,16 +175,16 @@ def logout():
 @app.route("/review", methods = ['POST'])
 def review():
     if "mural_t" in request.form:
-        DB.process_mural(db, True, flask.g.mural_url)
+        DB.process_mural(db, True, flask.session["next_mural"])
         flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
     if "mural_f" in request.form:
-        DB.process_mural(db, False, flask.g.mural_url)
+        DB.process_mural(db, False, flask.session["next_mural"])
         flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
     if "selfie_t" in request.form:
-        DB.process_selfie(db, True, flask.g.selfie_url)
+        DB.process_selfie(db, True, flask.session["next_selfie"])
         flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
     if "selfie_f" in request.form:
-        DB.process_selfie(db, False, flask.g.selfie_url)
+        DB.process_selfie(db, False, flask.session["next_selfie"])
         flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
     return flask.render_template("/admin.html")
     
