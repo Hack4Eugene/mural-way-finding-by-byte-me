@@ -39,8 +39,8 @@ def index():
 
 @app.route("/mural")
 def mural():
-    # TODO: Gets selfies using mural id and send to client
-    pass
+    app.logger.debug("Mural page entry")
+    return render_template('mural.html')
 
 @app.route("/submit_mural")
 def submit_mural():

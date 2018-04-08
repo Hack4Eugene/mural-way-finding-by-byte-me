@@ -4,20 +4,19 @@ from bson import ObjectId
 from bson import objectid
 
 
-def sorted_list(db, lon, lat):
+def sorted_list(db, lon=None, lat=None):
     records = []
 
     if lon is None or lat is None:
         for record in db.Mural.find({}).limit(30):
             records.append(record)
         records = sorted(records, key=lambda k: k['name'], reverse=True)
-        records = [x["img_id"] for x in records]
     else:
         for record in db.Mural.find({"type": "mural"}).limit(30):
             dist = euclidean([lon,lat], [record["lon"],record["lat"]])
             records.append(record, dist)
         records = sorted(records, key=lambda k: k[1], reverse=True)
-        records = [x[0]["img_id"] for x in records]
+        records = [x[0] for x in records]
 
     return records
 
@@ -67,12 +66,11 @@ def add_selfie_to_queue(db,img_id,mural_id):
     @return     None, adds a selfie entry to db["AdminSelfieQ"]
     """
 
-    db = db["AdminSelfieQ"]
     entry = {
         "img_id": img_id,
         "mural_id": mural_id
     }
-    db.insert(entry)
+    db["AdminSelfieQ"].insert(entry)
     return None
 
 
@@ -89,7 +87,6 @@ def process_selfie(db, is_approved, aws_url):
 
     selfie = db["AdminSelfieQ"].find_one({"img_id":aws_url})
     mural_id = selfie["mural_id"]
-    print(mural_id)
     if is_approved:
         obj = objectid.ObjectId(mural_id)
         mural = db["Mural"].find_one({"_id":obj})
@@ -103,6 +100,7 @@ def process_selfie(db, is_approved, aws_url):
     db["AdminSelfieQ"].remove({"img_id":aws_url})
     return None
 
+
 def process_mural(db, is_approved, aws_url):
     """
     @brief      process a mural in the admin's mural queue
@@ -113,5 +111,11 @@ def process_mural(db, is_approved, aws_url):
 
     @return     None,         Delete the value from the queue and add the mural to the table
     """
+    if is_approved:
+        new = db["AdminMuralQ"].find_one({"img_id":aws_url})
+        result = db["Mural"].insert_one(new)
+        if result == None:
+            print("Failed to add to mural queue")
 
-    selfie = db["AdminMuralQ"]
+    db["AdminMuralQ"].delete_one({"img_id":aws_url})
+    return 
