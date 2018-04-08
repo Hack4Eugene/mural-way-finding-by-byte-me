@@ -45,7 +45,7 @@ def mural():
     app.logger.debug("Mural page entry")
     image_url = flask.session["image_id"]
     mural_instance = db.Mural.find_one({"img_id":image_url})
-
+    db.Mural.update({"img_id":image_url},{"$inc":{"pageview":1}})
     return render_template('mural.html', mural_instance = mural_instance)
 
 @app.route("/submit_mural")
