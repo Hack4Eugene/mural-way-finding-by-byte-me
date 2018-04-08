@@ -19,6 +19,9 @@
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  width: 40%;
+  height: 150%;
+  font-size: 200%;
 }
 /* Add a black background color to the top navigation */
 .topnav {
@@ -27,7 +30,7 @@
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
     left: 0;
-    width: 100%; /* Full width */
+    width: 200%; /* Full width */
 
 }
 #top {
