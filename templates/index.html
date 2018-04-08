@@ -12,8 +12,12 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	</head>
-	<body>	
-		<h1>Welcome to Mural Wayfinder</h1>
+	<body>
+    <p id="top"></p>
+        <div class="topnav" id="myTopnav">
+      <a href="#home" class="active">Mural Wayfinder</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+    </div>
 		<a href="submit_mural"><button id="submit" src="/submit_mural">Submit Mural</button></a>
 
 		<a href="admin"><button id="submit3" src="/admin">submit3</button></a><br><br>
@@ -23,6 +27,11 @@
 		<img src={{mural.img_id}} alt="User Image">
 		<br>
 		{% endfor %}
+<<<<<<< HEAD
+=======
+		<a href="admin"><button id="submit" src="/admin">Admin Login</button></a>
+
+>>>>>>> ac0b9a88d4702bd2fefa03087a86197d7d5345fe
 
 		<script type="text/javascript">
 			SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
