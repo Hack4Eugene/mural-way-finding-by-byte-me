@@ -28,11 +28,13 @@ app.secret_key = str(uuid.uuid4())
 ###
 
 @app.route("/")
-@app.route("/index")
+@app.route("/index", methods = ["GET", "POST"])
 def index():
     if 'admin_status' not in flask.session:
         flask.session['admin_status'] = False
-        
+    if 'manage' not in flask.session:
+		flask.session['manage'] = False
+		
     app.logger.debug("Main page entry")
     data = DB.sorted_list(db)
     app.logger.debug(len(data))
@@ -158,7 +160,7 @@ def manage():
     
     """
     flask.session["manage"] = True
-    return flask.render_template("index.html")
+    return render_template('index.html', mural_data=data)
     
 @app.route("/review", methods = ['POST'])
 def review():
@@ -192,6 +194,27 @@ def ja():
     return flask.jsonify(result=rslt)
 
 
+@app.route("/delete",methods=["POST"])
+def delete():
+    # update_db.delete_from_db(db,request)
+    print("=======================================")
+    checked_murals = []
+    form = request.form
+    print(db["Mural"].count())
+    # print(request.form.get("check1"))
+    for i in range(1,db["Mural"].count()+1):
+        try:
+            aws_url = form["check{}".format(i)]
+            checked_murals.append(aws_url)
+        except:
+            pass
+
+    print(checked_murals)
+    for mural in checked_murals:
+        db["Mural"].remove({"img_id":mural})
+    print("=======================================")
+    return flask.redirect(url_for("index"))
+    return None
 
 @app.route("/_get_images")
 def get_images():
