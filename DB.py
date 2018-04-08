@@ -1,6 +1,9 @@
+import pymongo
+
+
 def add_mural(db,name,address,description,image):
     """
-    @brief      Adds a mural to the database
+    @brief      Adds a new mural to the database
 
     @param      db           The database
     @param      name         The name of mural
@@ -21,5 +24,13 @@ def add_mural(db,name,address,description,image):
         "img": image,
         "selfies": []
         }
-    db.insert(entry)
+
+    #First upload the image of the Mural to the file system
+    filedata = grid.GridFS(db)
+    upload_result = None #TODO
+
+    #Then add mural to collection Mural
+    collection = db.murals 
+  
+
     return None
