@@ -6,7 +6,6 @@ import boto3
 import flask
 import DB
 import aux_funcs
-# Mongo database
 import pymongo
 from PIL import Image
 from botocore.client import Config
@@ -74,6 +73,7 @@ def submit_photo():
         rng_str = 'murals/{}.jpeg'.format(str(uuid.uuid4()))
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
+    return DB.add_image(db, bucket_str)
 
 
 @app.route("/admin_login")
@@ -97,30 +97,10 @@ def get_location():
 @app.route("/_get_images")
 def get_images():
     # Pulls Mural data from mongo and sets order
-    # TODO: This may not work
-    long = request.args.get('long', 0, type=float)
+    lon = request.args.get('lon', 0, type=float)
     lat = request.args.get('lat', 0, type=float)
-
-    long_lat = [long, lat]
-
-    records = []
-
-    # TODO limit calling the entire DB
-    if long is None or lat is None:
-        # TODO: Fix to catch error
-        for record in mural_table.find({"type": "mural"}).sort("name", pymongo.ASCENDING):
-            # TODO image logic
-            records.append(record)
-
-        records = sorted(records, key=lambda k: k['mural_name'], reverse=True)
-    else:
-        for record in mural_table.find({"type": "mural"}).sort("long_lat", pymongo.ASCENDING):
-            # TODO image logic
-            records.append(record)
-        # TODO edit to sort by euclidean distance
-        records = sorted(records, key=lambda k: k['long_lat'], reverse=True)
-
-    return records
+    images = DB.sorted_list(db, lon, lat)
+    return images
 
 
 @app.route("/_upload_selfie")
