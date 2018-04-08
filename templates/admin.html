@@ -20,12 +20,12 @@
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
     	{% if session["admin_status"] == false %}
-		<div><h1>Log in to Mural Wayfinder</h1></div>
-		<form method="POST" action="/admin_login" id="admin_form" name='placeholder'>
-			<input type="text" placeholder="User Name" name="username"><br>
-			<input type="password" placeholder="Password" name="password"><br>
-			<input type="submit" value="Submit">
-		</form>
+			<div><h1>Log in to Mural Wayfinder</h1></div>
+			<form method="POST" action="/admin_login" id="admin_form" name='placeholder'>
+				<input type="text" placeholder="User Name" name="username"><br>
+				<input type="password" placeholder="Password" name="password"><br>
+				<input type="submit" value="Submit">
+			</form>
 		{% endif %}
 		{% if session["admin_status"] == true %}
 			<!--Title-->
@@ -33,17 +33,21 @@
 
 			<!--Review Mural-->
 			<h2>Review Murals</h2>
+			
 			<div>
 				<img src={{result.mural.img_id}} alt="User Image" style="border: none; width: 100%;">
 				<br>
 			</div>
 
+			<button></button>
 			<!--Review Selfie-->
 			<h2>Review Selfie</h2>
+
 			<div>
 				<img src={{result.selfie.img_id}} alt="User Image" style="border: none; width: 100%;">
 				<br>
 			</div>
+
 
 			<form method="POST" action="/logout" id="logout" name='placeholder'>
 				<input type="submit" value="Log Out">
@@ -52,8 +56,8 @@
 
 	</body>
 	<script>
-		             function goHome(){
-              location.href = "/";
-             }
+		function goHome(){
+			location.href = "/";
+		}
 	</script>
 </html>
