@@ -4,20 +4,19 @@ from bson import ObjectId
 from bson import objectid
 
 
-def sorted_list(db, lon, lat):
+def sorted_list(db, lon=None, lat=None):
     records = []
 
     if lon is None or lat is None:
         for record in db.Mural.find({}).limit(30):
             records.append(record)
         records = sorted(records, key=lambda k: k['name'], reverse=True)
-        records = [x["img_id"] for x in records]
     else:
         for record in db.Mural.find({"type": "mural"}).limit(30):
             dist = euclidean([lon,lat], [record["lon"],record["lat"]])
             records.append(record, dist)
         records = sorted(records, key=lambda k: k[1], reverse=True)
-        records = [x[0]["img_id"] for x in records]
+        records = [x[0] for x in records]
 
     return records
 
