@@ -14,17 +14,22 @@
 	</head>
 	<body>	
 		<h1>Welcome to Mural Wayfinder</h1>
-		<button id="submit">Submit Mural</button>
+		<a href="submit_mural"><button id="submit" src="/submit_mural">Submit Mural</button></a>
+
+
+
 		<script type="text/javascript">
-			var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
+			SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
-			// function submit(){
-			// 	window.location.replace( + "/submit_mural");
-			// }
+			function submit(){
 
-			$("#submit").click(function(){
 				window.location.replace(SCRIPT_ROOT + "/submit_mural");
-			})
+				console.log("HELLO");	
+			}
+
+			// $("#submit").click(function(){
+			// 	window.location.replace(SCRIPT_ROOT + "/submit_mural");
+			// })
 		</script>
 	</body>
 </html>
