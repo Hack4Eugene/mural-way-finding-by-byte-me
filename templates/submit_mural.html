@@ -8,15 +8,15 @@
 
 	-->
 	<head>
+		<title>Submit Mural</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
 		<meta charset="UTF-8">
-		<title>Index</title>
 		<script src="../library/jquery.js"></script>
 
 	</head>
 
 	<body>
-		<div><h1>Welcome to Mural Wayfinder</h1></div>
+		<div><h1>Submit a Mural</h1></div>
 		<!--
 		<form action = "_submit_photo" method = "POST" 
 			enctype = "multipart/form-data">
@@ -27,15 +27,31 @@
 		<img src="{{bucketsrc}}" class="img-responsive"/>
 		-->
 
-		<form method="POST" action="/admin_login" id="admin_form">
-			<input type="text" placeholder="Mural Title" id="mural_title"><br>
-			<input type="text" placeholder="Description" id="description"><br>
-			<div id=holder></div>
+		<form method="POST" action="/_submit_photo" id="submit_photo">
+			<input type="text" placeholder="Mural Title" id="mural_title" class="requiredInput"><br>
+			<input type="text" placeholder="Description" id="description" class="requiredInput"><br>
+			<input type="text" placeholder="Address Location" id="location" class="requiredInput"><br>
 			<input type="file" accept="image/*" id="file-input">	
-		</form>
+		</form>	
+		<button id="submit">Submit</button>
 
-	<script type="text/javascript">
-		console.log("TEST")
+		<script>
+			$("#submit").click(function(){
+				var rEle = document.getElementsByClassName('requiredInput');
+				var valid = true;
+				for(var i in rEle){
+					if(rEle[i].value.trim() == ""){
+						valid = false;
+					}
+				}
+
+				if(valid){
+					console.log("VALID");
+				}else{
+					console.log("INVALID");
+				}
+			});
+
 		navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
 		console.log(localStorage['authorizedGeoLocation'])
 		function successCallback(position) {
@@ -54,8 +70,7 @@
     		"Longitude: " + position.coords.longitude);
 		}
 
-	</script>
-
+		</script>
 	</body>
 	
 
