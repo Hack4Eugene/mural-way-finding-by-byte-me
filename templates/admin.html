@@ -19,15 +19,30 @@
       <a href="#home" class="active" onclick="goHome()">Mural Wayfinder</a>
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
+    	{% if session["admin_status"] == false %}
 		<div><h1>Log in to Mural Wayfinder</h1></div>
 		<form method="POST" action="/admin_login" id="admin_form" name='placeholder'>
 			<input type="text" placeholder="User Name" name="username"><br>
 			<input type="password" placeholder="Password" name="password"><br>
 			<input type="submit" value="Submit">
 		</form>
-
+		{% endif %}
 		{% if session["admin_status"] == true %}
-			<p>SUCCESS</p>
+			<!--Title-->
+			<h1>Admin</h1>
+
+			<!--Review Mural-->
+			<h2>Review Murals</h2>
+			<div></div>
+
+			<!--Review Selfie-->
+			<h2>Review Selfie</h2>
+			<div></div>
+			
+
+			<form method="POST" action="/logout" id="logout" name='placeholder'>
+				<input type="submit" value="Log Out">
+			</form>
 		{% endif %}
 
 	</body>

@@ -87,7 +87,10 @@ def submit_photo():
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
         print(lat_lon)
-        result = DB.add_mural_to_queue(db,lat_lon[0], lat_lon[1],title,address,"Unknown",description, bucket_str)
+        if lat_lon:
+            result = DB.add_mural_to_queue(db,lat_lon[0], lat_lon[1],title,address,"Unknown",description, bucket_str)
+        else:
+            result = DB.add_mural_to_queue(db,None, None,title,address,"Unknown",description, bucket_str)
         if not result:
             print("AGHHHH!")
     return render_template("submit_mural.html")
