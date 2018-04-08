@@ -42,6 +42,9 @@
                 $.getJSON('/_ja', { image_id: image_id },function(data) {
                 console.log("data: " + data)
                 function_string = data.result.function;
+                for(var i=0; i<1000; i++){
+
+                }
                 loadPage("/mural")
                 });
              }
