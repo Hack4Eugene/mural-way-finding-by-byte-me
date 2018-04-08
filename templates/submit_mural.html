@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+<!-- jquery; CDN load is usually quick because it's likely cached -->
 	<!--
 		Noah Palmer, Jeanie Chen
 		||WEBSITE LOCATION||
 
-		
+
 
 	-->
 	<head>
@@ -18,28 +19,43 @@
 	<body>
 		<div><h1>Submit a Mural</h1></div>
 		<!--
-		<form action = "_submit_photo" method = "POST" 
+		<form action = "_submit_photo" method = "POST"
 			enctype = "multipart/form-data">
 			<input type = "file" name = "file" />
 			<input type = "submit"/>
 		</form>
-		
+
 		<img src="{{bucketsrc}}" class="img-responsive"/>
 		-->
-
-		<form method="POST" action="/_submit_photo" id="submit_photo">
-			<input type="text" placeholder="Mural Title" id="mural_title" class="requiredInput"><br>
-			<input type="text" placeholder="Description" id="description" class="requiredInput"><br>
-			<input type="text" placeholder="Address Location" id="location" class="requiredInput"><br>
-			<input type="file" accept="image/*" id="file-input">	
-		</form>	
-		<button id="submit">Submit</button>
+			<input type="text" placeholder="Mural Title" id="mural_title" class="requiredInput"/><br>
+			<input type="text" placeholder="Description" id="description" class="requiredInput"/><br>
+			<input type="text" placeholder="Address Location" id="locationz" class="requiredInput"/><br>
+		<form action="_submit_photo" method="POST" enctype = "multipart/form-data">
+			<input type="file" accept="image/*" name="file"/>
+            <input type="submit" id="submit" />
+		</form>
+		<!--button id="submit">Submit</button-->
 
 		<script>
+		    var mural_title = "hello";
+		    var description = "darkness";
+		    var locationz = "my old friend";
+
+
 			$("#submit").click(function(){
+                console.log( "Handler for .keypress() called." );
+                var mural_title = $("#mural_title").val();
+                var description = $("#description").val();
+                var locationz = $("#locationz").val();
+
+                console.log($("#mural_title").val().toLowerCase());
+                console.log($("#description").val().toLowerCase());
+                console.log($("#locationz").val().toLowerCase());
+				test(mural_title, description, locationz);
+
 				var rEle = document.getElementsByClassName('requiredInput');
 				var valid = true;
-				for(var i in rEle){
+				for(var i = 0; i < rEle.length; i++){
 					if(rEle[i].value.trim() == ""){
 						valid = false;
 					}
@@ -47,6 +63,7 @@
 
 				if(valid){
 					console.log("VALID");
+
 				}else{
 					console.log("INVALID");
 				}
@@ -74,10 +91,18 @@
     			"Longitude: " + position.coords.longitude);
 			}
 
-
+			// TODO: Rename
+			function test(mural_title, description, locationz) {
+                $.getJSON('/_test', { title: mural_title, desc: description, loc: locationz },function(data) {
+                console.log("data: " + data)
+                function_string = data.result.function;
+                });
+             }
+             function loadPage(txt) {
+                location.href = txt;
+                }
 		</script>
 	</body>
-	
 
 </html>
 

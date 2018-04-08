@@ -15,19 +15,15 @@
 	</head>
 	<body>
 		<div><h1>Log in to Mural Wayfinder</h1></div>
-		<form method="POST" action="/admin_login" id="admin_form">
-			<input type="text" placeholder="User Name" id="username"><br>
-			<input type="password" placeholder="Password" id="password">
+		<form method="POST" action="/admin_login" id="admin_form" name='placeholder'>
+			<input type="text" placeholder="User Name" name="username"><br>
+			<input type="password" placeholder="Password" name="password"><br>
+			<input type="submit" value="Submit">
 		</form>
-		<button id="login">Log In</button>
 
-		<script>
-			$("#login").click(function(){
-				var username = document.getElementById("username").value;
-				var password = document.getElementById("password").value;
+		{% if session["admin_status"] == true %}
+			<p>SUCCESS</p>
+		{% endif %}
 
-				console.log("User Name: " + username + " | " + "Password: " + password);
-			});
-		</script>
 	</body>
 </html>
