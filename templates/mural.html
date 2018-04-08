@@ -6,6 +6,7 @@
 		<meta charset="UTF-8">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<body>
 		<p id="top"></p>
         <div class="topnav" id="myTopnav">
@@ -14,7 +15,21 @@
     </div>
 		<div><h1>"{{ mural_instance.name }}"</h1></div><br>
 		<h2><a href="https://www.google.com/maps/dir/?api=1&destination={{ mural_instance.lat }},{{ mural_instance.lon }}">Get Directions</a></h2>
-		<img style="border:none; width:100%;" src="{{ mural_instance.img_id }}" alt="User Image">
+		<div class="w3-content w3-display-container">
+  <img style="border:none; width:100%;" class="mySlides" src="{{mural_instance.img_id}}" style="width:100%">
+
+  {% for selfie in mural_instance.selfies %}
+
+  <img style="border:none; width:100%;" class="mySlides" src="{{ selfie }}"/>
+
+  {% endfor %}
+
+  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+</div>
+<br>
+<br>
+
 		<img>
 		<p>{{ mural_instance.description }}</p>
 
@@ -22,10 +37,26 @@
 			<input type="file" accept="image/*" name="file"/><br>
             <input type="submit" id="submit" value="Submit Selfie"/>
 		</form>
-		<button>Submit Selfie</button>
 
 		<script>
-			             function goHome(){
+			var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+			 function goHome(){
               location.href = "/";
              }
 		</script>
