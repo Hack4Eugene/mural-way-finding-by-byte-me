@@ -26,9 +26,6 @@ app = flask.Flask(__name__)
 @app.route("/index")
 def index():
     app.logger.debug("Main page entry")
-    #TODO collect login info
-    lat, lon = collect_location()
-    murals_info = DB.get_mural_list(db, lat, lon) 
     return render_template('index.html')
 
 
