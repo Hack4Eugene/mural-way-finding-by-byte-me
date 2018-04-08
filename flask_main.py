@@ -53,15 +53,6 @@ def submit_mural():
     app.logger.debug("Submit Mural page entry")
     return render_template("submit_mural.html")
 
-    # TODO:
-    # Get lat/long(double)
-    # Call method to add database using form information above
-    # Number of Visits
-
-    # TODO: call submit mural form
-    # pass
-
-
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
     app.logger.debug("Submit Mural page entry")
@@ -69,9 +60,6 @@ def submit_photo():
         title = flask.session['title']
         address = flask.session['loc']
         description = flask.session['desc']
-        print(title)
-        print(address)
-        print(description)
 
         im = request.files['file']
         i = 0
@@ -92,7 +80,7 @@ def submit_photo():
         rng_str = 'murals/{}.jpeg'.format(str(uuid.uuid4()))
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
-        print(lat_lon)
+
         if lat_lon:
             result = DB.add_mural_to_queue(db,lat_lon[0], lat_lon[1],title,address,"Unknown",description, bucket_str)
         else:
@@ -119,7 +107,7 @@ def test():
 
 @app.route("/admin",methods=["POST","GET"])
 def admin():
-    # result = {flask.session['next_mural'],flask.session['next_selfie']}
+
     return render_template("admin.html")
 
 @app.route("/admin_login", methods = ['POST', 'GET'])
@@ -131,13 +119,11 @@ def admin_login():
         session: admin_status
               g: iderror, passerror, login_screen        
     """
-    # if flask.session["admin_status"]:
-    #     return flask.redirect(flask.url_for("admin"))
     input_id = flask.request.form['username']
     input_pw = flask.request.form['password']
     print(input_id)
     print(input_pw)
-    b_pw = input_pw.encode('utf-8')  #i.e. sets ('string') to form: (b'string')
+    b_pw = input_pw.encode('utf-8') #sets ('string') to form: (b'string')
     admin = db.Admin.find_one({'admin_id': input_id})
     if admin is None:
         print("Error: Admin Not found")
@@ -146,39 +132,31 @@ def admin_login():
     if bcrypt.checkpw(b_pw, admin['admin_pw']):
         print('password checked successfully')
         flask.session["admin_status"] = True
-        
-        
         flask.session["next_mural"] = DB.get_mural_queue(db) and DB.get_mural_queue(db)["img_id"]
         flask.session["next_selfie"] = DB.get_selfie_queue(db) and DB.get_selfie_queue(db)['img_id']
-        # if next_mural:
-        #     flask.session["next_mural"] = next_mural["img_id"]
-        # else:
-        #     flask.session["next_mural"] = None
-
-        # next_selfie = DB.get_selfie_queue(db)
-        # if next_selfie:
-        #     flask.session["next_selfie"] = next_selfie["img_id"]
-        # else:
-        #     flask.session["next_selfie"] = None
 
         flask.g.login_screen = False
         return flask.redirect(flask.url_for("admin"))
     else:
-        print('password incorrect!!!')
+        print('password incorrect!')
         flask.g.passerror = True
         return render_template("admin.html")
 
 @app.route("/logout", methods = ["POST"])
 def logout():
     """
-    This function sets these:
-        admin_status
+    Logout and redirect back to index.
     """
     flask.session["admin_status"] = False
+    
     return flask.redirect(flask.url_for("index"))
 
 @app.route("/review", methods = ['POST'])
 def review():
+    """
+    Decide what to do based on what review button was pressed, using DB functions.
+    Incoming: python black magic.
+    """
     if "mural_t" in request.form:
         DB.process_mural(db, True, flask.session["next_mural"])
         flask.session["next_mural"] = DB.get_mural_queue(db) and DB.get_mural_queue(db)["img_id"]
@@ -192,20 +170,12 @@ def review():
         DB.process_selfie(db, False, flask.session["next_selfie"])
         flask.session["next_selfie"] = DB.get_selfie_queue(db) and DB.get_selfie_queue(db)['img_id']
     return flask.render_template("/admin.html")
-    
-@app.route("/create")
-def create():
-    app.logger.debug("Create")
-    return render_template('create.html')
-
-
-@app.route("/_get_location")
-def get_location():
-    app.logger.debug("Get Location")
-    pass
 
 @app.route("/_ja")
 def ja():
+    """
+    Helper function for ummmmmmmm what is it, main? or its. . . the one that starts wth an m.. Mural! - Wyatt
+    """
     image_id = request.args.get("image_id", 0, type=str)
     print(image_id)
     flask.session["image_id"] = image_id
@@ -225,8 +195,6 @@ def get_images():
 
 @app.route("/_upload_selfie", methods=['POST'])
 def upload_selfie():
-    # TODO: Upload picture to separate
-    # http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
     app.logger.debug("Submit Mural page entry")
     if request.method == 'POST':
 
