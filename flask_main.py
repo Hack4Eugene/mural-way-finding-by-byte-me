@@ -138,7 +138,10 @@ def admin_login():
         print('password checked successfully')
         flask.session["admin_status"] = True
         flask.g.login_screen = False
-        return render_template("admin.html")
+        mural = DB.get_mural_queue(db)
+        selfie = DB.get_selfie_queue(db)
+        result = {"mural":mural,"selfie":selfie}
+        return render_template("admin.html",result=result)
     else:
         print('password incorrect!!!')
         flask.g.passerror = True
