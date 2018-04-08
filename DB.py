@@ -111,11 +111,11 @@ def process_mural(db, is_approved, aws_url):
 
     @return     None,         Delete the value from the queue and add the mural to the table
     """
-
-    new = db["AdminMuralQ"].find_one({"img_id":aws_url})
-    result = db["Mural"].insert_one(new)
-    if result == None:
-        print("Failed to add to mural queue")
+    if is_approved:
+        new = db["AdminMuralQ"].find_one({"img_id":aws_url})
+        result = db["Mural"].insert_one(new)
+        if result == None:
+            print("Failed to add to mural queue")
 
     db["AdminMuralQ"].delete_one({"img_id":aws_url})
     return 
