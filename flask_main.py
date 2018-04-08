@@ -75,8 +75,39 @@ def submit_photo():
 
 @app.route("/admin_login")
 def admin_login():
-    # TODO: DO LAST
-    pass
+    """
+    When the login button is clicked, check if the input credentials are legit.
+    Set session keys based on what happens.HTML will respond accordingly.
+    This function sets these:
+        session: admin_status
+              g: iderror, passerror, login_screen        
+    """
+    input_id = flask.request.form['username']
+    nput_pw = flask.request.form['password']
+    b_pw = input_pw.encode('UTF-8')  #i.e. sets ('string') to form: (b'string')
+    admin = db.Admin.find_one({'admin_id': input_id})
+    if admin is None:
+        print("Error: Admin Not found")
+        flask.g.iderror = True
+        return render_template("admin.html")
+    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
+        print('password checked successfully')
+        flask.session["admin_status"] = True
+        flask.g.login_screen = False
+        return render_template("admin.html")
+    else:
+        print('password incorrect!!!')
+        flask.g.passerror = True
+        return render_template("admin.html")
+
+@app.route("/logout")
+def logout():
+    """
+    This function sets these:
+        admin_status
+    """
+    flask.session["admin_status"] = False
+    render_template("/index.html")
 
 
 @app.route("/create")
@@ -146,4 +177,4 @@ if __name__ == "__main__":
 
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
-    app.run(port=CONFIG.PORT, host="0.0.0.0")
+    app.run(port=CONFIG.PORT, host="0.0.0.0", ssl_context='adhoc')

@@ -51,7 +51,27 @@
 					console.log("INVALID");
 				}
 			});
+
+		navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
+		console.log(localStorage['authorizedGeoLocation'])
+		function successCallback(position) {
+		  // By using the 'maximumAge' option above, the position
+ 		  // object is guaranteed to be at most 10 minutes old.
+ 		  showPosition(position)
+		}
+
+		function errorCallback(error) {
+		    // Update a div element with error.message.
+		    document.getElementById("holder").append('<input visibility="hidden" type="text" placeholder="Address" id="address"><br>')
+		}
+
+		function showPosition(position) {
+    		console.log("Latitude: " + position.coords.latitude + 
+    		"Longitude: " + position.coords.longitude);
+		}
+
 		</script>
 	</body>
+	
 
 </html>
