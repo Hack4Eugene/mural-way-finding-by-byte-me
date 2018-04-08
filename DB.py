@@ -1,4 +1,5 @@
 import pymongo
+import boto3
 from aux_funcs import euclidean
 from bson import ObjectId
 from bson import objectid
@@ -94,6 +95,14 @@ def process_selfie(db, is_approved, aws_url):
             selfies = mural["selfies"]
             selfies.append(aws_url)
             db["Mural"].update_one({"img_id":mural_id},{'$set':{"selfies":selfies}})
+        s3 = boto3.resource(
+            's3',
+            aws_access_key_id=AWSAccessKeyId,
+            aws_secret_access_key=AWSSecretKey,
+            config=Config(signature_version='s3v4')
+        )
+        
+        s3.Bucket('muralwayfinderimages').delete_key(mural_id)
 
     # Delete the Selfie from the AdminSelfieQ after it has been processed
     db["AdminSelfieQ"].remove({"img_id":aws_url})
