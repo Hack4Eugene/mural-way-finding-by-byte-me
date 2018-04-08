@@ -10,7 +10,7 @@ def sorted_list(db, lon=None, lat=None):
     if lon is None or lat is None:
         for record in db.Mural.find({}).limit(30):
             records.append(record)
-        records = sorted(records, key=lambda k: k['name'], reverse=True)
+        records = sorted(records, key=lambda k: k['pageview'], reverse=True)
     else:
         for record in db.Mural.find({"type": "mural"}).limit(30):
             if record["lon"] and record["lat"]:
