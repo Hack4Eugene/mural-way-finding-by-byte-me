@@ -14,6 +14,7 @@ from flask import request
 from flask import url_for
 import CONFIG
 from credentials import *
+from latlong_helper import *
 
 
 
@@ -63,6 +64,7 @@ def submit_photo():
         print(description)
 
         im = request.files['file']
+        lat_lon = read_file_lat_long(im)
         im = Image.open(im)
         in_mem_file = io.BytesIO()
         im.save(in_mem_file, format="JPEG")
@@ -77,7 +79,10 @@ def submit_photo():
         rng_str = 'murals/{}.jpeg'.format(str(uuid.uuid4()))
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
-    DB.add_image(db, bucket_str)
+        print(lat_lon)
+        result = DB.add_mural_to_queue(db,lat_lon[0], lat_lon[1],title,address,"Unknown",description, bucket_str)
+        if not result:
+            print("AGHHHH!")
     return render_template("submit_mural.html")
 
 @app.route("/_test")
@@ -204,4 +209,4 @@ if __name__ == "__main__":
 
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
-    app.run(port=CONFIG.PORT, host="0.0.0.0", ssl_context='adhoc')
+    app.run(port=CONFIG.PORT, host="0.0.0.0")
