@@ -31,7 +31,10 @@ app.secret_key = str(uuid.uuid4())
 @app.route("/index")
 def index():
     app.logger.debug("Main page entry")
-    return render_template('index.html')
+    data = DB.sorted_list(db)
+    app.logger.debug(len(data))
+    app.logger.debug(data[0])
+    return render_template('index.html', mural_data=data)
 
 
 @app.route("/mural")
