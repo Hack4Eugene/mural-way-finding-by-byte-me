@@ -13,12 +13,11 @@
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
 		<div><h1>"{{ mural_instance.name }}"</h1></div><br>
-		<h2><a href="https://www.google.com/maps/search/?api=1&query={{ mural_instance.lat }},{{ mural_instance.lon }}">Get Directions</a></h2>
+		<h2><a href="https://www.google.com/maps/dir/?api=1&destination={{ mural_instance.lat }},{{ mural_instance.lon }}">Get Directions</a></h2>
 		<img style="border:none; width:50%;" src="{{ mural_instance.img_id }}" alt="User Image">
 		<img>
 		<p>{{ mural_instance.description }}</p>
 		<button>Submit Selfie</button>
-		<button id="google-maps">
 
 		<script>
 			             function goHome(){
