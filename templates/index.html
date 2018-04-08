@@ -20,15 +20,6 @@
       <a href="#admin" class="active" onclick="admin()">Admin Login</a>
 	      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
 	    </div>
-	    <div class="buttonbar" align="center">
-            <a href="submit_mural">
-                <button id="submit" src="/submit_mural">Submit Mural</button>
-            </a>
-            <a href="admin">
-                <button id="submit" src="/admin">Admin Login</button>
-            </a>
-            <br>
-		</div>
 		{% if session["manage"] == true %}
 			<form method=POST action="{{ url_for('delete') }}">
 				<input type ="submit" value="delete selected" style="float:right;margin-right:5%">
