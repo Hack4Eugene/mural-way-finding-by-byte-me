@@ -39,7 +39,10 @@
 				<br>
 			</div>
 
-			<button></button>
+			<form>
+				<input type="submit" name="mural_t" value="Approve">
+				<input type="submit" name="mural_f" value="Deny">
+			</form>
 			<!--Review Selfie-->
 			<h2>Review Selfie</h2>
 
@@ -48,8 +51,11 @@
 				<br>
 			</div>
 
-
-			<form method="POST" action="/logout" id="logout" name='placeholder'>
+			<form>
+				<input type="submit" name="selfie_t" value="Approve">
+				<input type="submit" name="selfie_f" value="Deny">
+			</form>
+			<form method="POST" action="/logout" id="logout" name='placeholder'/>
 				<input type="submit" value="Log Out">
 			</form>
 		{% endif %}
@@ -59,5 +65,7 @@
 		function goHome(){
 			location.href = "/";
 		}
+
+		
 	</script>
 </html>
