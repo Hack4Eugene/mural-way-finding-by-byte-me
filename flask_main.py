@@ -160,7 +160,7 @@ def manage():
     
     """
     flask.session["manage"] = True
-    return render_template('index.html', mural_data=data)
+    return flask.redirect(flask.url_for("index"))
     
 @app.route("/review", methods = ['POST'])
 def review():
@@ -196,12 +196,8 @@ def ja():
 
 @app.route("/delete",methods=["POST"])
 def delete():
-    # update_db.delete_from_db(db,request)
-    print("=======================================")
     checked_murals = []
     form = request.form
-    print(db["Mural"].count())
-    # print(request.form.get("check1"))
     for i in range(1,db["Mural"].count()+1):
         try:
             aws_url = form["check{}".format(i)]
@@ -209,10 +205,8 @@ def delete():
         except:
             pass
 
-    print(checked_murals)
     for mural in checked_murals:
         db["Mural"].remove({"img_id":mural})
-    print("=======================================")
     return flask.redirect(url_for("index"))
     return None
 
