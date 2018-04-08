@@ -1,6 +1,7 @@
 import pymongo
 from aux_funcs import euclidean
 from bson import ObjectId
+from bson import objectid
 
 
 def sorted_list(db, lon, lat):
@@ -53,3 +54,53 @@ def new_mural(db,lat,lon,name,address,artist,description,image):
     result = db.AdminMuralQ.insert_one(entry)
   
     return True
+
+def add_selfie_to_queue(db,img_id,mural_id):
+    """
+    @brief      Adds a selfie to AdminSelfie's queue.
+
+    @param      db         The main database
+    @param      img_id     The amazon web service image url
+    @param      mural_id   The image identifier (links selfie to specific mural)
+
+    @return     None, adds a selfie entry to db["AdminSelfieQ"]
+    """
+
+    db = db["AdminSelfieQ"]
+    entry = {
+        "img_id": img_id,
+        "mural_id": mural_id
+    }
+    db.insert(entry)
+    return None
+
+def process_selfie(db,is_approved,aws_url):
+    """
+    @brief      processes a selfie in the admin's selfie queue
+
+    @param      db           The database
+    @param      is_approved(bool)  Indicates if the selfie has been approved
+    @param      aws_url      The amazon web service image url
+
+    @return     None, deletes the image from the queue and then attaches image to a mural's selfie list iff the image was approved.
+    """
+
+    selfie = db["AdminSelfieQ"].find_one({"img_id":aws_url})
+    mural_id = selfie["mural_id"]
+    print(mural_id)
+    if is_approved:
+        obj = objectid.ObjectId(mural_id)
+        print(obj)
+        mural = db["Mural"].find_one({"_id":obj})
+        print(mural)
+        # If the selfie image is not in the Mural's selfie list then add it
+        if aws_url not in mural["selfies"]:
+            selfies = mural["selfies"]
+            print(selfies)
+            selfies.append(aws_url)
+            print(selfies)
+            db["Mural"].update_one({"_id":obj},{'$set':{"selfies":selfies}})
+
+    # Delete the Selfie from the AdminSelfieQ after it has been processed
+    db["AdminSelfieQ"].remove({"img_id":aws_url})
+    return None
