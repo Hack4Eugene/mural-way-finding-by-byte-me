@@ -7,6 +7,7 @@ import flask
 import DB
 import aux_funcs
 import pymongo
+import bcrypt
 from PIL import Image
 from botocore.client import Config
 from flask import render_template
