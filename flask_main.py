@@ -2,9 +2,10 @@ import io
 import logging
 import sys
 import uuid
-
 import boto3
 import flask
+import DB
+import aux_funcs
 # Mongo database
 import pymongo
 from PIL import Image
@@ -17,20 +18,6 @@ from credentials import *
 
 
 app = flask.Flask(__name__)
-#app.secret_key = CONFIG.secret_key
-
-####
-# Database connection per server process
-###
-'''
-try:
-    dbclient = MongoClient(MONGO_CLIENT_URL)
-    db = getattr(dbclient, secrets.client_secrets.db)
-    collection = db.dated
-except:
-    print("Failure opening database.  Is Mongo running? Correct password?")
-    sys.exit(1)
-'''
 
 ###
 # Pages
@@ -40,7 +27,9 @@ except:
 @app.route("/index")
 def index():
     app.logger.debug("Main page entry")
-    # TODO: Get Mural data from db to send to client
+    #TODO collect login info
+    lat, lon = collect_location()
+    murals_info = DB.get_mural_list(db, lat, lon) 
     return render_template('index.html')
 
 
