@@ -165,6 +165,14 @@ if __name__ == "__main__":
         print("Failure opening database.  Is Mongo running? Correct password?")
         sys.exit(1)
 
+	if sys.argv.len > 1:
+		if sys.argv[1] = "adminsetup":
+			#Setup admin in database
+			admin = db.Admin.find_one_and_update(
+				{"admin_id": ADMIN_ID}, '$set' : {"admin_pw": ADMIN_PW})
+			if admin is None:
+				db.Admin.insert_one({'admin_id': ADMIN_ID, 'admin_pw' : ADMIN_PW})
+
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
     app.run(port=CONFIG.PORT, host="0.0.0.0")
