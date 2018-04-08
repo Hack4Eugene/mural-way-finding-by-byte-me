@@ -15,7 +15,9 @@
 	<body>
 	    <p id="top"></p>
 	    <div class="topnav" id="myTopnav">
-	      <a href="#home" class="active">Mural Wayfinder</a>
+	      <a href="#home" class="active" onclick="goHome()">Mural Wayfinder (Beta)</a>
+      <a href="#submit" class="active" onclick="submit()">Submit Mural</a>
+      <a href="#admin" class="active" onclick="admin()">Admin Login</a>
 	      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
 	    </div>
 	    <div class="buttonbar" align="center">
@@ -77,6 +79,12 @@
 				window.location.replace(SCRIPT_ROOT + "/submit_mural");
 				console.log("HELLO");	
 			}
+			             function submit(){
+              location.href = "/submit_mural";
+             }
+             function admin(){
+              location.href = "/admin";
+             }
 
 			// $("#submit").click(function(){
 			// 	window.location.replace(SCRIPT_ROOT + "/submit_mural");
