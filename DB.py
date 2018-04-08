@@ -21,17 +21,16 @@ def sorted_list(db, lon, lat):
     return records
 
 
-def add_image(db, aws_url):
-    return
-
-
-def add_mural(db,name,address,artist,description,image):
+def new_mural(db,lat,lon,name,address,artist,description,image):
     """
     @brief      Adds a new mural to the database
 
     @param      db           The database
+    @param      lat          Photo latitude coordinate
+    @param      lon          Photo longitude coordinate
     @param      name         The name of mural
     @param      address      The address (location) of mural
+    @param      artist       The artist of the mural
     @param      description  The description
     @param      image        The image
 
@@ -45,17 +44,12 @@ def add_mural(db,name,address,artist,description,image):
         "artist": artist,
         "address": address,
         "description": description,
-        "pageload": 0,
-        "img": image,
+        "pageview": 0,
+        "img_id": image,
         "selfies": []
         }
 
-    #First upload the image of the Mural to the file system
-    filedata = grid.GridFS(db)
-    upload_result = None #TODO
-
     #Then add mural to collection Mural
-    collection = db.murals 
+    result = db.AdminMuralQ.insert_one(entry)
   
-
-    return None
+    return True
