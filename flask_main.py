@@ -173,4 +173,4 @@ if __name__ == "__main__":
 
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
-    app.run(port=CONFIG.PORT, host="0.0.0.0")
+    app.run(port=CONFIG.PORT, host="0.0.0.0", ssl_context='adhoc')
