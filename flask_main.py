@@ -28,6 +28,9 @@ app = flask.Flask(__name__)
 def index():
     app.logger.debug("Main page entry")
     #TODO collect login info
+    if "admin_status" not in flask.session:
+        flask.session["admin_status"] = False
+    
     lat, lon = collect_location()
     murals_info = DB.get_mural_list(db, lat, lon) 
     return render_template('index.html')
@@ -78,9 +81,39 @@ def submit_photo():
 
 @app.route("/admin_login")
 def admin_login():
-    # TODO: DO LAST
-    pass
+    """
+    When the login button is clicked, check if the input credentials are legit.
+    Set session keys based on what happens.HTML will respond accordingly.
+    This function sets these:
+        session: admin_status
+              g: iderror, passerror, login_screen        
+    """
+    input_id = flask.request.form['username']
+    nput_pw = flask.request.form['password']
+    b_pw = input_pw.encode('UTF-8')  #i.e. sets ('string') to form: (b'string')
+    admin = db.Admin.find_one({'admin_id': input_id})
+    if admin is None:
+        print("Error: Admin Not found")
+        flask.g.iderror = True
+        return render_template("admin.html")
+    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
+        print('password checked successfully')
+        flask.session["admin_status"] = True
+        flask.g.login_screen = False
+        return render_template("admin.html")
+    else:
+        print('password incorrect!!!')
+        flask.g.passerror = True
+        return render_template("admin.html")
 
+@app.route("/logout")
+def logout():
+    """
+    This function sets these:
+        admin_status
+    """
+    flask.session["admin_status"] = False
+    render_template("/index.html")
 
 @app.route("/create")
 def create():
@@ -156,13 +189,13 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "adminsetup":
             #Hash admin password
-			b_pw = ADMIN_PW.encode('UTF-8') #string needs to be in form: b'string'
-			hashed = bcrypt.hashpw(b_pw, bcrypt.gensalt())
-			if bcrypt.checkpw(b_pw, hashed): #TODO delete this if/else
-				print('password hashed successfully')
-			else:
-				print('password hash error!!!')
-			#Setup admin in database
+            b_pw = ADMIN_PW.encode('UTF-8') #string needs to be in form: b'string'
+            hashed = bcrypt.hashpw(b_pw, bcrypt.gensalt())
+            if bcrypt.checkpw(b_pw, hashed): #TODO delete this if/else
+                print('password hashed successfully')
+            else:
+                print('password hash error!!!')
+            #Setup admin in database
             admin = db.Admin.find_one_and_update({"admin_id": ADMIN_ID},{'$set' :{ "admin_pw": hashed}})
             if admin is None:
                 db.Admin.insert_one({'admin_id': ADMIN_ID, 'admin_pw' : hashed})
