@@ -1,70 +1,23 @@
-import flask
+import io
+import logging
 import sys
 import uuid
+import boto3
+import flask
+import DB
 import aux_funcs
-from flask import g
+# Mongo database
+import pymongo
+from PIL import Image
+from botocore.client import Config
 from flask import render_template
 from flask import request
 from flask import url_for
-from PIL import Image, ImageFile
-import json
-import logging
-import latlong_helper as llh # read_file_lat_long(input_file)
-import boto3
-from botocore.client import Config
-import io
-
-# Mongo database
-from pymongo import MongoClient
-import pymongo
-# for use removing _ids
-from bson.objectid import ObjectId
-
+import CONFIG
 from credentials import *
 
 
-mongo_uri = "mongodb://{}:{}@{}"
-connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
-
-db = connection.test
-print(db)
-print(type(connection.main.Mural))
-result = connection.main.Mural.insert_one({"test":"test"})
-print(connection.main.Mural.find_one())
-
-try:
-    db = connection.test
-    print(db)
-    print(type(connection.main.Mural))
-    #result = connection.main.Mural.insert_one({"test": "test"})
-    #print(connection.main.Mural.find_one())
-    mural_table = db.Mural.find({})
-
-except:
-    print("Failure opening database.  Is Mongo running? Correct password?")
-    sys.exit(1)
-
-###
-# Globals
-###
-import CONFIG
-
 app = flask.Flask(__name__)
-#app.secret_key = CONFIG.secret_key
-
-####
-# Database connection per server process
-###
-'''
-try:
-    dbclient = MongoClient(MONGO_CLIENT_URL)
-    db = getattr(dbclient, secrets.client_secrets.db)
-    collection = db.dated
-
-except:
-    print("Failure opening database.  Is Mongo running? Correct password?")
-    sys.exit(1)
-'''
 
 ###
 # Pages
@@ -74,7 +27,9 @@ except:
 @app.route("/index")
 def index():
     app.logger.debug("Main page entry")
-    # TODO: Get Mural data from db to send to client
+    #TODO collect login info
+    lat, lon = collect_location()
+    murals_info = DB.get_mural_list(db, lat, lon) 
     return render_template('index.html')
 
 
@@ -120,35 +75,12 @@ def submit_photo():
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
 
-        return render_template("submit_mural.html", bucketsrc=bucket_str)
-
 
 @app.route("/admin_login")
 def admin_login():
-    input_id = flask.request.form['username']
-    input_pw = flask.request.form['password']
-    b_pw = input_pw.encode('UTF-8')  ###string needs to be in form: b'string'
-	
-	admin = credentais[]
-    
-	if admin is None:
-        print("Error: Meeting Not found")
-        flask.g.iderror = True
-        return render_template()
-    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
-        print('password checked successfully')
-	else:
-        print('password incorrect!!!')
-        flask.g.passerror = True
-        return render_template()
-    #Probably want to set this as false at the beggining
-	flask.session["admin_status"] = True
-    return render_template()
+    # TODO: DO LAST
+    pass
 
-@app.route("/logout")
-def logout():
-	flask.session["admin_status"] = False
-	
 
 @app.route("/create")
 def create():
@@ -211,6 +143,23 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
+    mongo_uri = "mongodb://{}:{}@{}"
+    connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
+
+    try:
+        db = connection.main
+        print(db)
+
+    except:
+        print("Failure opening database.  Is Mongo running? Correct password?")
+        sys.exit(1)
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "adminsetup":
+            #Setup admin in database
+            admin = db.Admin.find_one_and_update({"admin_id": ADMIN_ID},{'$set' :{ "admin_pw": ADMIN_PW}})
+            if admin is None:
+                db.Admin.insert_one({'admin_id': ADMIN_ID, 'admin_pw' : ADMIN_PW})
+
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
     app.run(port=CONFIG.PORT, host="0.0.0.0")
