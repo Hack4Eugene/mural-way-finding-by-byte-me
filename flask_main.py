@@ -30,11 +30,12 @@ app.secret_key = str(uuid.uuid4())
 @app.route("/")
 @app.route("/index", methods = ["GET", "POST"])
 def index():
+    # Loads home page
     if 'admin_status' not in flask.session:
         flask.session['admin_status'] = False
     if 'manage' not in flask.session:
         flask.session['manage'] = False
-		
+
     app.logger.debug("Main page entry")
     data = DB.sorted_list(db)
     app.logger.debug(len(data))
@@ -44,16 +45,20 @@ def index():
 
 @app.route("/mural")
 def mural():
+    # Loads and individual mural page
     app.logger.debug("Mural page entry")
     image_url = flask.session["image_id"]
     mural_instance = db.Mural.find_one({"img_id":image_url})
     db.Mural.update({"img_id":image_url},{"$inc":{"pageview":1}})
     return render_template('mural.html', mural_instance = mural_instance)
 
+
 @app.route("/submit_mural")
 def submit_mural():
+    # Loads the submit mural page
     app.logger.debug("Submit Mural page entry")
     return render_template("submit_mural.html")
+
 
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
@@ -68,8 +73,10 @@ def submit_photo():
         for i in range(1000):
             i = i
         lat_lon = read_file_lat_long(im)
+        # Opens file and prepares to be sent to db
         im = Image.open(im)
         in_mem_file = io.BytesIO()
+        # Saves file locally and sends to db
         im.save(in_mem_file, format="JPEG")
         s3 = boto3.resource(
             's3',
@@ -91,6 +98,7 @@ def submit_photo():
             print("AGHHHH!")
     return render_template("submit_mural.html")
 
+
 @app.route("/_test")
 def test():
     app.logger.debug("Got a JSON request");
@@ -107,10 +115,12 @@ def test():
     rslt = {"function": "/index"}
     return flask.jsonify(result=rslt)
 
+
 @app.route("/admin",methods=["POST","GET"])
 def admin():
 
     return render_template("admin.html")
+
 
 @app.route("/admin_login", methods = ['POST', 'GET'])
 def admin_login():
@@ -119,7 +129,7 @@ def admin_login():
     Set session keys based on what happens.HTML will respond accordingly.
     This function sets these:
         session: admin_status
-              g: iderror, passerror, login_screen        
+              g: iderror, passerror, login_screen
     """
     input_id = flask.request.form['username']
     input_pw = flask.request.form['password']
@@ -145,23 +155,26 @@ def admin_login():
         flask.g.passerror = True
         return render_template("admin.html")
 
+
 @app.route("/logout", methods = ["POST"])
 def logout():
     """
     Logout and redirect back to index.
     """
     flask.session["admin_status"] = False
-    
+
     return flask.redirect(flask.url_for("index"))
+
 
 @app.route("/manage", methods = ["POST"])
 def manage():
     """
-    
+
     """
     flask.session["manage"] = True
     return flask.redirect(flask.url_for("index"))
-    
+
+
 @app.route("/review", methods = ['POST'])
 def review():
     """
@@ -181,6 +194,7 @@ def review():
         DB.process_selfie(db, False, flask.session["next_selfie"])
         flask.session["next_selfie"] = DB.get_selfie_queue(db) and DB.get_selfie_queue(db)['img_id']
     return render_template("/admin.html")
+
 
 @app.route("/_ja")
 def ja():
@@ -209,6 +223,7 @@ def delete():
         db["Mural"].remove({"img_id":mural})
     return flask.redirect(url_for("index"))
     return None
+
 
 @app.route("/_get_images")
 def get_images():
@@ -246,6 +261,7 @@ def upload_selfie():
     image_url = flask.session["image_id"]
     mural_instance = db.Mural.find_one({"img_id": image_url})
     return render_template("mural.html", mural_instance=mural_instance)
+
 
 @app.errorhandler(404)
 def page_not_found(error):

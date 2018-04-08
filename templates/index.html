@@ -15,21 +15,16 @@
 	<body>
 	    <p id="top"></p>
 	    <div class="topnav" id="myTopnav">
-	      <a href="#home" class="active">Mural Wayfinder</a>
+	      <a href="#home" class="active" onclick="goHome()">Mural Wayfinder (Beta)</a>
+      <a href="#submit" class="active" onclick="submit()">Submit Mural</a>
+      <a href="#admin" class="active" onclick="admin()">Admin Login</a>
 	      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
 	    </div>
-	    <div class="buttonbar" align="center">
-            <a href="submit_mural">
-                <button id="submit" src="/submit_mural">Submit Mural</button>
-            </a>
-            <a href="admin">
-                <button id="submit" src="/admin">Admin Login</button>
-            </a>
-            <br>
-		</div>
+	    <h1 style="text-align: center; font-size: 500%; padding-bottom: 50px; "><u>Eugene Murals</u></h1>
 		{% if session["manage"] == true %}
 			<form method=POST action="{{ url_for('delete') }}">
-				<input type ="submit" value="delete selected" style="float:right;margin-right:5%">
+				<input type ="submit" value="delete selected" style="float:right;margin-right:5%; padding-bottom: 50px;">
+				<hr>
 				{% for mural in mural_data %}
 				<div class="mural">
 					<div id="mural_header">
@@ -77,6 +72,12 @@
 				window.location.replace(SCRIPT_ROOT + "/submit_mural");
 				console.log("HELLO");	
 			}
+			             function submit(){
+              location.href = "/submit_mural";
+             }
+             function admin(){
+              location.href = "/admin";
+             }
 
 			// $("#submit").click(function(){
 			// 	window.location.replace(SCRIPT_ROOT + "/submit_mural");
