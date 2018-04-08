@@ -113,9 +113,7 @@ def test():
 
 @app.route("/admin",methods=["POST","GET"])
 def admin():
-    mural = DB.get_mural_queue(db)
-    selfie = DB.get_selfie_queue(db)
-    result = {"mural":mural,"selfie":selfie}
+    result = {flask.session['next_mural'],flask.session['next_selfie']}
     return render_template("admin.html",result=result)
 
 @app.route("/admin_login", methods = ['POST', 'GET'])
@@ -142,6 +140,10 @@ def admin_login():
     if bcrypt.checkpw(b_pw, admin['admin_pw']):
         print('password checked successfully')
         flask.session["admin_status"] = True
+        
+        flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
+        flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
+        
         flask.g.login_screen = False
         return flask.redirect(flask.url_for("admin"))
     else:
@@ -162,13 +164,16 @@ def logout():
 def review():
     if "mural_t" in request.form:
         DB.process_mural(db, True, flask.g.mural_url)
+        flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
     if "mural_f" in request.form:
         DB.process_mural(db, False, flask.g.mural_url)
+        flask.session["next_mural"] = DB.get_mural_queue(db)['img_id']
     if "selfie_t" in request.form:
         DB.process_selfie(db, True, flask.g.selfie_url)
+        flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
     if "selfie_f" in request.form:
         DB.process_selfie(db, False, flask.g.selfie_url)
-    
+        flask.session["next_selfie"] = DB.get_selfie_queue(db)['img_id']
     return flask.render_template("/admin.html")
     
 @app.route("/create")
