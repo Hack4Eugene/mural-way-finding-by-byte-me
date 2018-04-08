@@ -12,37 +12,9 @@ from botocore.client import Config
 from flask import render_template
 from flask import request
 from flask import url_for
-
+import CONFIG
 from credentials import *
 
-# for use removing _ids
-
-
-mongo_uri = "mongodb://{}:{}@{}"
-connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
-
-db = connection.test
-print(db)
-print(type(connection.main.Mural))
-result = connection.main.Mural.insert_one({"test":"test"})
-print(connection.main.Mural.find_one())
-
-try:
-    db = connection.test
-    print(db)
-    print(type(connection.main.Mural))
-    #result = connection.main.Mural.insert_one({"test": "test"})
-    #print(connection.main.Mural.find_one())
-    mural_table = db.Mural.find({})
-
-except:
-    print("Failure opening database.  Is Mongo running? Correct password?")
-    sys.exit(1)
-
-###
-# Globals
-###
-import CONFIG
 
 app = flask.Flask(__name__)
 #app.secret_key = CONFIG.secret_key
@@ -184,6 +156,17 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
+    mongo_uri = "mongodb://{}:{}@{}"
+    connection = pymongo.MongoClient(mongo_uri.format(DB_USER, DB_PASSWORD, DB_DOMAIN))
+
+    try:
+        db = connection.main
+        print(db)
+
+    except:
+        print("Failure opening database.  Is Mongo running? Correct password?")
+        sys.exit(1)
+
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
     app.run(port=CONFIG.PORT, host="0.0.0.0")
