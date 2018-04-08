@@ -132,6 +132,7 @@ def admin_login():
     if bcrypt.checkpw(b_pw, admin['admin_pw']):
         print('password checked successfully')
         flask.session["admin_status"] = True
+        flask.session["manage"] = False
         flask.session["next_mural"] = DB.get_mural_queue(db) and DB.get_mural_queue(db)["img_id"]
         flask.session["next_selfie"] = DB.get_selfie_queue(db) and DB.get_selfie_queue(db)['img_id']
 
@@ -151,6 +152,14 @@ def logout():
     
     return flask.redirect(flask.url_for("index"))
 
+@app.route("/manage", methods = ["POST"])
+def manage():
+    """
+    
+    """
+    flask.session["manage"] = True
+    return flask.render_template("index.html")
+    
 @app.route("/review", methods = ['POST'])
 def review():
     """
@@ -169,7 +178,7 @@ def review():
     if "selfie_f" in request.form:
         DB.process_selfie(db, False, flask.session["next_selfie"])
         flask.session["next_selfie"] = DB.get_selfie_queue(db) and DB.get_selfie_queue(db)['img_id']
-    return flask.render_template("/admin.html")
+    return render_template("/admin.html")
 
 @app.route("/_ja")
 def ja():
@@ -224,9 +233,9 @@ def upload_selfie():
 @app.errorhandler(404)
 def page_not_found(error):
     app.logger.debug("Page not found")
-    return flask.render_template('page_not_found.html',
-                                 badurl=request.base_url,
-                                 linkback=url_for("index")), 404
+    return render_template('page_not_found.html',
+                            badurl=request.base_url,
+                            linkback=url_for("index")), 404
 
 
 if __name__ == "__main__":
@@ -240,6 +249,7 @@ if __name__ == "__main__":
     except:
         print("Failure opening database.  Is Mongo running? Correct password?")
         sys.exit(1)
+    #This can be extended to handle more commands. This is an easy way to allow setting up admins. There should not be too many, considering the use case.
     if len(sys.argv) > 1:
         if sys.argv[1] == "adminsetup":
             #Hash admin password
