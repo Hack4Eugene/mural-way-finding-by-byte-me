@@ -1,11 +1,12 @@
 import pymongo
+from math import sqrt
 
-def euclidean(x, y):
+def euclidean(A, B):
     sumSq = 0.0
 
     # add up the squared differences
-    for i in range(len(x)):
-        sumSq += (x[i] - y[i]) ** 2
+    for i in range(len(A)):
+        sumSq += (A[i] - B[i]) ** 2
 
     # take the square root of the result
-    return sumSq ** 0.5
+    return sqrt(sumSq)
