@@ -150,6 +150,19 @@ def logout():
     flask.session["admin_status"] = False
     return flask.redirect(flask.url_for("index"))
 
+@app.route("/review", methods = ['POST'])
+def review():
+    if "mural_t" in request.form:
+        DB.process_mural(db, True, flask.g.mural_url)
+    if "mural_f" in request.form:
+        DB.process_mural(db, False, flask.g.mural_url)
+    if "selfie_t" in request.form:
+        DB.process_selfie(db, True, flask.g.selfie_url)
+    if "selfie_f" in request.form:
+        DB.process_selfie(db, False, flask.g.selfie_url)
+    
+    return flask.render_template("/admin.html")
+    
 @app.route("/create")
 def create():
     app.logger.debug("Create")
