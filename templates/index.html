@@ -20,9 +20,11 @@
       <a href="#admin" class="active" onclick="admin()">Admin Login</a>
 	      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
 	    </div>
+	    <h1 style="text-align: center; font-size: 500%; padding-bottom: 50px; "><u>Eugene Murals</u></h1>
 		{% if session["manage"] == true %}
 			<form method=POST action="{{ url_for('delete') }}">
-				<input type ="submit" value="delete selected" style="float:right;margin-right:5%">
+				<input type ="submit" value="delete selected" style="float:right;margin-right:5%; padding-bottom: 50px;">
+				<hr>
 				{% for mural in mural_data %}
 				<div class="mural">
 					<div id="mural_header">

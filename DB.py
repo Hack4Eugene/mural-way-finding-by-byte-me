@@ -101,6 +101,7 @@ def process_selfie(db, is_approved, aws_url):
     else:
         pass
         # ADD AWS DELETION
+        # I tried to add delete using Boto3 or boto but was not successful
     db["AdminSelfieQ"].delete_one({"img_id":aws_url})
     return None
 

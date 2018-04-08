@@ -8,3 +8,4 @@ Flask
 exifread
 boto3
 bson
+boto
