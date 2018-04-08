@@ -119,4 +119,21 @@ def process_mural(db, is_approved, aws_url):
             print("Failed to add to mural queue")
 
     db["AdminMuralQ"].delete_one({"img_id":aws_url})
-    return 
+    return None
+
+def get_mural_queue(db,load_limit=15):
+    records = []
+    murals = db["AdminMuralQ"].find({}).limit(load_limit)
+
+    for mural in murals:
+        records.append(mural)
+
+    return records
+
+def get_selfie_queue(db,load_limit=15):
+    records = []
+    murals = db["AdminSelfieQ"].find({}).limit(load_limit)
+    for mural in murals:
+        records.append(mural)
+
+    return records
