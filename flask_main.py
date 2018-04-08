@@ -34,7 +34,10 @@ def index():
         flask.session['admin_status'] = False
         
     app.logger.debug("Main page entry")
-    return render_template('index.html')
+    data = DB.sorted_list(db)
+    app.logger.debug(len(data))
+    app.logger.debug(data[0])
+    return render_template('index.html', mural_data=data)
 
 
 @app.route("/mural")
@@ -108,7 +111,7 @@ def test():
 @app.route("/admin")
 def admin():
 	return render_template("admin.html")
-	
+
 @app.route("/admin_login", methods = ['POST', 'GET'])
 def admin_login():
     """
