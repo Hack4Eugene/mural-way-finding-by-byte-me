@@ -138,15 +138,16 @@ def admin_login():
         flask.g.passerror = True
         return render_template("admin.html")
 
-@app.route("/logout")
+@app.route("/logout", methods = ["POST"])
 def logout():
     """
     This function sets these:
         admin_status
     """
     flask.session["admin_status"] = False
-    render_template("/index.html")
+    return flask.redirect(flask.url_for("index"))
 
+@app.route("/")
 
 @app.route("/create")
 def create():
