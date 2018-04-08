@@ -15,9 +15,13 @@ from flask import request
 from flask import url_for
 import CONFIG
 from credentials import *
+from latlong_helper import *
+
 
 
 app = flask.Flask(__name__)
+app.secret_key = str(uuid.uuid4())
+
 
 ###
 # Pages
@@ -51,11 +55,17 @@ def submit_mural():
 
 @app.route("/_submit_photo", methods = ['GET', 'POST'])
 def submit_photo():
+    app.logger.debug("Submit Mural page entry")
     if request.method == 'POST':
-        #title = request.form['title']
-        #address = request.form['address']
-        #description = request.form['description']
+        title = flask.session['title']
+        address = flask.session['loc']
+        description = flask.session['desc']
+        print(title)
+        print(address)
+        print(description)
+
         im = request.files['file']
+        lat_lon = read_file_lat_long(im)
         im = Image.open(im)
         in_mem_file = io.BytesIO()
         im.save(in_mem_file, format="JPEG")
@@ -70,7 +80,27 @@ def submit_photo():
         rng_str = 'murals/{}.jpeg'.format(str(uuid.uuid4()))
         bucket_str = 'https://s3-us-west-2.amazonaws.com/muralwayfinderimages/{}'.format(rng_str)
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
-    return DB.add_image(db, bucket_str)
+        print(lat_lon)
+        result = DB.add_mural_to_queue(db,lat_lon[0], lat_lon[1],title,address,"Unknown",description, bucket_str)
+        if not result:
+            print("AGHHHH!")
+    return render_template("submit_mural.html")
+
+@app.route("/_test")
+def test():
+    app.logger.debug("Got a JSON request");
+    title = request.args.get("title", 0, type=str)
+    desc = request.args.get("desc", 0, type=str)
+    loc = request.args.get("loc", 0, type=str)
+
+    flask.session["title"] = title
+    flask.session["desc"] = desc
+    flask.session["loc"] = loc
+
+    #TODO add to DB
+
+    rslt = {"function": "/index"}
+    return flask.jsonify(result=rslt)
 
 @app.route("/admin")
 def admin():
@@ -182,4 +212,4 @@ if __name__ == "__main__":
 
     #app.debug = CONFIG.DEBUG
     app.logger.setLevel(logging.DEBUG)
-    app.run(port=CONFIG.PORT, host="0.0.0.0", ssl_context='adhoc')
+    app.run(port=CONFIG.PORT, host="0.0.0.0")

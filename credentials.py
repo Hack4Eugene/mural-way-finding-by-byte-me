@@ -9,5 +9,5 @@ AWSAccessKeyId = 'AKIAJKNTY5AMTWSHWWMQ'
 AWSSecretKey = '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'
 
 #Admin user/pass
-ADMIN_ID = "admin"
-ADMIN_PW = "password"
+ADMIN_ID = "obama"
+ADMIN_PW = "bidenB0i"
