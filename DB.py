@@ -18,7 +18,6 @@ def sorted_list(db, lon=None, lat=None):
                 records.append(record, dist)
         records = sorted(records, key=lambda k: k[1], reverse=True)
         records = [x[0] for x in records]
-
     return records
 
 
