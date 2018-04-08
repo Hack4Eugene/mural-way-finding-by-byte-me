@@ -30,6 +30,9 @@ app.secret_key = str(uuid.uuid4())
 @app.route("/")
 @app.route("/index")
 def index():
+    if 'admin_status' not in flask.session:
+        flask.session['admin_status'] = False
+        
     app.logger.debug("Main page entry")
     return render_template('index.html')
 
