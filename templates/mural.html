@@ -17,13 +17,17 @@
 		<img style="border:none; width:50%;" src="{{ mural_instance.img_id }}" alt="User Image">
 		<img>
 		<p>{{ mural_instance.description }}</p>
-		<button>Submit Selfie</button>
-		<button id="google-maps">
+
+		<form action="_upload_selfie" method="POST" enctype = "multipart/form-data">
+			<input type="file" accept="image/*" name="file"/><br>
+            <input type="submit" id="submit" value="Submit Selfie"/>
+		</form>
 
 		<script>
 			             function goHome(){
               location.href = "/";
              }
 		</script>
+
 	</body>
 </html>
