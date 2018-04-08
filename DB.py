@@ -124,5 +124,5 @@ def process_mural(db, is_approved, aws_url):
 def get_mural_queue(db):
     return db["AdminMuralQ"].find_one({})
 
-def get_selfie_queue(db,load_limit=15):
+def get_selfie_queue(db):
     return db["AdminSelfieQ"].find_one({})
