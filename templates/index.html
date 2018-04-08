@@ -9,7 +9,7 @@
 		<title>Mural Wayfinder</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
 		<meta charset="UTF-8">
-		<script src="../library/jquery.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	</head>
 	<body>
@@ -19,6 +19,10 @@
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
 		<a href="submit_mural"><button id="submit" src="/submit_mural">Submit Mural</button></a>
+
+		{% for mural in mural_data %}
+		<img src=mural.source alt="User Image">
+		{% endfor %}
 		<a href="admin"><button id="submit" src="/admin">Admin Login</button></a>
 
 

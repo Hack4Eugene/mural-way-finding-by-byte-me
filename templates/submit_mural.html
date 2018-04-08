@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
 <!-- jquery; CDN load is usually quick because it's likely cached -->
-<script type="text/javascript"
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-</script>
 	<!--
 		Noah Palmer, Jeanie Chen
 		||WEBSITE LOCATION||
@@ -15,6 +12,7 @@
 		<title>Submit Mural</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
 		<meta charset="UTF-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	</head>
 
@@ -71,6 +69,29 @@
 				}
 			});
 
+			window.onload = getPos
+
+			function getPos(){
+				navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:1});
+			}
+		
+			function successCallback(position) {
+		 	 	// By using the 'maximumAge' option above, the position
+ 		 	 	// object is guaranteed to be at most 10 minutes old.
+ 		  		showPosition(position)
+			}
+
+			function errorCallback(error) {
+			    // Update a div element with error.message.
+			    console.log("Denied")
+			}
+
+			function showPosition(position) {
+    			console.log("Latitude: " + position.coords.latitude + 
+    			"Longitude: " + position.coords.longitude);
+			}
+
+			// TODO: Rename
 			function test(mural_title, description, locationz) {
                 $.getJSON('/_test', { title: mural_title, desc: description, loc: locationz },function(data) {
                 console.log("data: " + data)
@@ -84,3 +105,4 @@
 	</body>
 
 </html>
+
