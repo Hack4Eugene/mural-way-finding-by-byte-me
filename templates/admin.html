@@ -31,6 +31,11 @@
 			<!--Title-->
 			<h1>Admin</h1>
 
+			<!--Manage-->
+			<form method="POST" action="/manage" id="manage" name='placeholder'>
+				<input type="submit" value="Manage">
+			</form>
+
 			<!--Review Mural-->
 			<h2>Review Murals</h2>
 			{% if session["next_mural"] != None %}
@@ -61,13 +66,11 @@
 				<p>There are currently no selfies to review</p>
 			{% endif %}
 
+			<!--Log Out-->
 			<form method="POST" action="/logout" id="logout" name='placeholder'>
 				<input type="submit" value="Log Out">
 			</form>
             
-            <form method="POST" action="/manage" id="manage" name='placeholder'>
-				<input type="submit" value="manage">
-			</form>
 		{% endif %}
 
 	</body>
