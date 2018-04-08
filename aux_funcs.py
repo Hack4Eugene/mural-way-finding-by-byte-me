@@ -1,5 +1,4 @@
 import pymongo
-from pymongo import MongoClient
 
 def euclidean(x, y):
     sumSq = 0.0
