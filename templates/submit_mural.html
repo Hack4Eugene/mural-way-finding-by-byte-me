@@ -22,23 +22,17 @@
       <a href="#home" class="active" onclick="goHome()">Mural Wayfinder</a>
       <a href="javascript:void(0);" class="icon">&#9776;</a>
     </div>
-		<div><h1>Submit a Mural</h1></div>
-		<!--
-		<form action = "_submit_photo" method = "POST"
-			enctype = "multipart/form-data">
-			<input type = "file" name = "file" />
-			<input type = "submit"/>
-		</form>
 
-		<img src="{{bucketsrc}}" class="img-responsive"/>
-		-->
-			<input type="text" placeholder="Mural Title" id="mural_title" class="requiredInput"/><br>
-			<input type="text" placeholder="Author and Description" id="description" class="requiredInput"/><br>
-			<input type="text" placeholder="Address Location" id="locationz" class="requiredInput"/><br>
+		<div align="center" style="text-align: center; float: center;">
+					<div><h1>Submit a Mural</h1></div>
+
+			<input type="text"  style="text-align:center;" placeholder="Mural Title" id="mural_title" class="requiredInput"/><br>
+			<input type="text" style="text-align:center;" placeholder="Author and Description" id="description" class="requiredInput"/><br>
+			<input type="text" style="text-align:center;" placeholder="Address Location" id="locationz" class="requiredInput"/><br>
 		<form action="_submit_photo" method="POST" enctype = "multipart/form-data">
-			<input type="file" accept="image/*" name="file"/>
+			<input type="file" accept="image/*" name="file"/><br>
             <input type="submit" id="submit" />
-		</form>
+		</form></div>
 		<!--button id="submit">Submit</button-->
 
 		<script>
