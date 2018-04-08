@@ -74,6 +74,9 @@ def submit_photo():
         print(description)
 
         im = request.files['file']
+        i = 0
+        for i in range(1000):
+            i = i
         lat_lon = read_file_lat_long(im)
         im = Image.open(im)
         in_mem_file = io.BytesIO()
