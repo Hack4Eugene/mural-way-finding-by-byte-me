@@ -7,6 +7,7 @@ import flask
 import DB
 import aux_funcs
 import pymongo
+import bcrypt
 from PIL import Image
 from botocore.client import Config
 from flask import render_template
@@ -75,7 +76,7 @@ def submit_photo():
 def admin():
 	return render_template("admin.html")
 	
-@app.route("/admin_login")
+@app.route("/admin_login", methods = ['POST', 'GET'])
 def admin_login():
     """
     When the login button is clicked, check if the input credentials are legit.
@@ -85,14 +86,16 @@ def admin_login():
               g: iderror, passerror, login_screen        
     """
     input_id = flask.request.form['username']
-    nput_pw = flask.request.form['password']
-    b_pw = input_pw.encode('UTF-8')  #i.e. sets ('string') to form: (b'string')
+    input_pw = flask.request.form['password']
+    print(input_id)
+    print(input_pw)
+    b_pw = input_pw.encode('utf-8')  #i.e. sets ('string') to form: (b'string')
     admin = db.Admin.find_one({'admin_id': input_id})
     if admin is None:
         print("Error: Admin Not found")
         flask.g.iderror = True
         return render_template("admin.html")
-    if bcrypt.checkpw(b_pw, meeting['meeting_pw']):
+    if bcrypt.checkpw(b_pw, admin['admin_pw']):
         print('password checked successfully')
         flask.session["admin_status"] = True
         flask.g.login_screen = False
