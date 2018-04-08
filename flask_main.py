@@ -57,8 +57,8 @@ def submit_photo():
     app.logger.debug("Submit Mural page entry")
     if request.method == 'POST':
         title = flask.session['title']
-        address = flask.session['desc']
-        description = flask.session['loc']
+        address = flask.session['loc']
+        description = flask.session['desc']
         print(title)
         print(address)
         print(description)
