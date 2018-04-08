@@ -88,13 +88,12 @@ def process_selfie(db, is_approved, aws_url):
     selfie = db["AdminSelfieQ"].find_one({"img_id":aws_url})
     mural_id = selfie["mural_id"]
     if is_approved:
-        obj = objectid.ObjectId(mural_id)
-        mural = db["Mural"].find_one({"_id":obj})
+        mural = db["Mural"].find_one({"img_id":mural_id})
         # If the selfie image is not in the Mural's selfie list then add it
         if aws_url not in mural["selfies"]:
             selfies = mural["selfies"]
             selfies.append(aws_url)
-            db["Mural"].update_one({"_id":obj},{'$set':{"selfies":selfies}})
+            db["Mural"].update_one({"img_id":mural_id},{'$set':{"selfies":selfies}})
 
     # Delete the Selfie from the AdminSelfieQ after it has been processed
     db["AdminSelfieQ"].remove({"img_id":aws_url})
