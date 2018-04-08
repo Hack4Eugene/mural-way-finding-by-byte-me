@@ -62,6 +62,7 @@
   .topnav.responsive {position: relative;}
   .topnav.responsive a.icon {
     position: absolute;
+    min-width: 10px;
     right: 0;
     top: 0;
 
@@ -72,4 +73,5 @@
     text-align: left;
   }
 }
+
 

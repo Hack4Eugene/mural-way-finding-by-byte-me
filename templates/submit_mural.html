@@ -19,8 +19,8 @@
 	<body>
         <p id="top"></p>
         <div class="topnav" id="myTopnav">
-      <a href="#home" class="active">Mural Wayfinder</a>
-      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+      <a href="#home" class="active" onclick="goHome()">Mural Wayfinder</a>
+      <a href="javascript:void(0);" class="icon">&#9776;</a>
     </div>
 		<div><h1>Submit a Mural</h1></div>
 		<!--
@@ -106,6 +106,9 @@
              function loadPage(txt) {
                 location.href = txt;
                 }
+             function goHome(){
+              location.href = "/";
+             }
 		</script>
 	</body>
 
