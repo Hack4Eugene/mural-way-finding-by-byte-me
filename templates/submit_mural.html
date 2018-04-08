@@ -11,7 +11,7 @@
 		<title>Submit Mural</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
 		<meta charset="UTF-8">
-		<script src="../library/jquery.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	</head>
 
@@ -52,26 +52,32 @@
 				}
 			});
 
-		navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
-		console.log(localStorage['authorizedGeoLocation'])
-		function successCallback(position) {
-		  // By using the 'maximumAge' option above, the position
- 		  // object is guaranteed to be at most 10 minutes old.
- 		  showPosition(position)
-		}
+			window.onload = getPos
 
-		function errorCallback(error) {
-		    // Update a div element with error.message.
-		    document.getElementById("holder").append('<input visibility="hidden" type="text" placeholder="Address" id="address"><br>')
-		}
+			function getPos(){
+				navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:1});
+			}
+		
+			function successCallback(position) {
+		 	 	// By using the 'maximumAge' option above, the position
+ 		 	 	// object is guaranteed to be at most 10 minutes old.
+ 		  		showPosition(position)
+			}
 
-		function showPosition(position) {
-    		console.log("Latitude: " + position.coords.latitude + 
-    		"Longitude: " + position.coords.longitude);
-		}
+			function errorCallback(error) {
+			    // Update a div element with error.message.
+			    console.log("Denied")
+			}
+
+			function showPosition(position) {
+    			console.log("Latitude: " + position.coords.latitude + 
+    			"Longitude: " + position.coords.longitude);
+			}
+
 
 		</script>
 	</body>
 	
 
 </html>
+
