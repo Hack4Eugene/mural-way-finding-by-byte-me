@@ -34,31 +34,31 @@
 			<!--Review Mural-->
 			<h2>Review Murals</h2>
 			{% if session["next_mural"] != None %}
-			<div>
-				<img src={{session["next_mural"]}} alt="User Image" style="border: none; width: 100%;">
-				<br>
-			</div>
-			<form method="POST" action="/review" id="mural_form" name='mural_form'>
-				<input type="submit" name="mural_t" value="Approve">
-				<input type="submit" name="mural_f" value="Deny">
-			</form>
+				<div>
+					<img src={{session["next_mural"]}} alt="User Image" style="border: none; width: 100%;">
+					<br>
+				</div>
+				<form method="POST" action="/review" id="mural_form" name='mural_form'>
+					<input type="submit" name="mural_t" value="Approve">
+					<input type="submit" name="mural_f" value="Deny">
+				</form>
 			{% else %}
-			<p>There are currently no murals to review</p>
+				<p>There are currently no murals to review</p>
 			{% endif %}
 
 			<!--Review Selfie-->
 			<h2>Review Selfie</h2>
 			{% if session["next_selfie"] != None %}
-			<div>
-				<img src={{session["next_selfie"]}} alt="User Image" style="border: none; width: 100%;">
-				<br>
-			</div>
-			<form method="POST" action="/review" id="selfie_form" name='selfie_form'>
-				<input type="submit" name="selfie_t" value="Approve">
-				<input type="submit" name="selfie_f" value="Deny">
-			</form>
+				<div>
+					<img src={{session["next_selfie"]}} alt="User Image" style="border: none; width: 100%;">
+					<br>
+				</div>
+				<form method="POST" action="/review" id="selfie_form" name='selfie_form'>
+					<input type="submit" name="selfie_t" value="Approve">
+					<input type="submit" name="selfie_f" value="Deny">
+				</form>
 			{% else %}
-			<p>There are currently no selfies to review</p>
+				<p>There are currently no selfies to review</p>
 			{% endif %}
 
 			<form method="POST" action="/logout" id="logout" name='placeholder'>
