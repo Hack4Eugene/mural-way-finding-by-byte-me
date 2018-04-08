@@ -15,8 +15,8 @@
       <a href="#admin" class="active" onclick="admin()">Admin Login</a>
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
-		<div><h1>"{{ mural_instance.name }}"</h1></div><br>
-		<h2><a href="https://www.google.com/maps/dir/?api=1&destination={{ mural_instance.lat }},{{ mural_instance.lon }}">Get Directions</a></h2>
+		<div><h1 style="text-align: center;">"{{ mural_instance.name }}"</h1></div><br>
+		<h2 style="text-align: center;" ><a  href="https://www.google.com/maps/dir/?api=1&destination={{ mural_instance.lat }},{{ mural_instance.lon }}">Get Directions</a></h2>
 		<div class="w3-content w3-display-container">
   <img style="border:none; width:100%;" class="mySlides" src="{{mural_instance.img_id}}" style="width:100%">
 
@@ -33,10 +33,10 @@
 <br>
 
 		<img>
-		<p>{{ mural_instance.description }}</p>
+		<p style="text-align: center;">{{ mural_instance.description }}</p>
 
-		<form action="_upload_selfie" method="POST" enctype = "multipart/form-data">
-			<input type="file" accept="image/*" name="file"/><br>
+		<form style="text-align: center;" action="_upload_selfie" method="POST" enctype = "multipart/form-data">
+			<input  type="file" accept="image/*" name="file"/><br>
             <input type="submit" id="submit" value="Submit Selfie"/>
 		</form>
 
