@@ -12,11 +12,11 @@
       <a href="#home" class="active" onclick="goHome()">Mural Wayfinder</a>
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
     </div>
-		<img src="{{ link }}" alt="User Image">
-		<div><h1>{{title}}</h1></div>
+		<div><h1>"{{ mural_instance.name }}"</h1></div>
+		<img style="border:none; width:50%;" src="{{ mural_instance.img_id }}" alt="User Image">
 
 		<img>
-		<p>{{Info}}</p>
+		<p>{{ mural_instance.description }}</p>
 		<button>Submit Selfie</button>
 		<button id="google-maps">
 

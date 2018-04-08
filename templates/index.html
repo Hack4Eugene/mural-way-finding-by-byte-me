@@ -25,7 +25,7 @@
 
 		{% for mural in mural_data %}
 		
-		<img src={{mural.img_id}} alt="User Image" style="border: none; width: 100%;">
+		<img src={{mural.img_id}} alt="User Image" id="{{mural.img_id}}"  onClick="ja_rule(this.id)" style="border: none; width: 100%;">
 		<br>
 		{% endfor %}
 
@@ -33,6 +33,22 @@
 
 
 		<script type="text/javascript">
+		var image_id = ""
+
+		function ja_rule(image_id){
+			so_great(image_id)
+		}
+		function so_great(image_id) {
+                $.getJSON('/_ja', { image_id: image_id },function(data) {
+                console.log("data: " + data)
+                function_string = data.result.function;
+                loadPage("/mural")
+                });
+             }
+
+             function loadPage(txt) {
+                location.href = txt;
+                }
 			SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
 			function submit(){

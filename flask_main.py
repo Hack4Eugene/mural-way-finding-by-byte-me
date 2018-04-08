@@ -43,7 +43,10 @@ def index():
 @app.route("/mural")
 def mural():
     app.logger.debug("Mural page entry")
-    return render_template('mural.html')
+    image_url = flask.session["image_id"]
+    mural_instance = db.Mural.find_one({"img_id":image_url})
+
+    return render_template('mural.html', mural_instance = mural_instance)
 
 @app.route("/submit_mural")
 def submit_mural():
@@ -181,6 +184,15 @@ def create():
 def get_location():
     app.logger.debug("Get Location")
     pass
+
+@app.route("/_ja")
+def ja():
+    image_id = request.args.get("image_id", 0, type=str)
+    print(image_id)
+    flask.session["image_id"] = image_id
+    rslt = {"function": "/mural"}
+    return flask.jsonify(result=rslt)
+
 
 
 @app.route("/_get_images")
