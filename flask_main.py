@@ -34,7 +34,6 @@ def mural():
     # TODO: Gets selfies using mural id and send to client
     pass
 
-
 @app.route("/submit_mural")
 def submit_mural():
     app.logger.debug("Submit Mural page entry")
@@ -72,7 +71,10 @@ def submit_photo():
         s3.Bucket('muralwayfinderimages').put_object(Key=rng_str, Body=in_mem_file.getvalue(), ACL='public-read')
     return DB.add_image(db, bucket_str)
 
-
+@app.route("/admin")
+def admin():
+	return render_template("admin.html")
+	
 @app.route("/admin_login")
 def admin_login():
     """
