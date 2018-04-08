@@ -1,35 +1,49 @@
-# Mural Way-finding by ByteMe
+#Mural Way-finding by ByteMe
+#####Authors: Isaac Lance, Justin Robles, Jeremiah Clothier, Petter Lovett, Noah Palmer, Jeanie Chen, Wyatt Reed
+###Requirements
+* python 3.6
+* pip3
+* MongoDB database
+* AWS Account using S3
 
-## About
+##Credentials.py
+This file holds all your credentials like passwords etc.
 
-This do is meant for anyone looking to create a mobile (native or mobile web, both are good.) way-finding experience based on the murals (or any local art really) around Eugene OR
+[MongoDB Info](https://docs.mongodb.com/tutorials/connect-to-mongodb-python/)
 
-## Sample Art Data
+DB_USER = "MongoDB user name"
 
-Artist: Blek le Rat
-Artist-Country: France
-Address: 100 East Broadway
-Latitude: 44.049609
-Longitude: -123.091073
-Description: "The Godfather of Stencil Art, Blek
-le Rat created ten works in Eugene,
-including the large scale “The Pied
-Piper” depicting his son playing a
-violin."
+DB_PASSWORD = "MongoDB password"
 
-JSON file available in this repo
+DB_DOMAIN = "Address of MongoDB Instance" 
 
-Data Source: https://s3.amazonaws.com/uploads.hipchat.com/10705/2444240/8Qb0qf27KrcZjkd/MuralBroc_4_web.pdf.pdf
+[AWS Info](https://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html)
 
+AWSAccessKeyId ='Account ID'
 
-## Needs
+AWSSecretKey = 'Account PW'
 
-* Upload new Local Art Data from mobile
-* Update Local Art Data from mobile
-* Find Local Art in Eugene on mobile
+###Site admin login and password:
+ADMIN_ID = "desired username"
 
-## Would like
+ADMIN_PW = "desired pass"
 
-* AR aspect
-* Share your selfies
-* get lat and long from address
+###To run the site locally:
+In the command line:
+
+Setup:
+
+    git clone https://github.com/Hack4Eugene/mural-way-finding-by-byte-me.git
+
+In the new directory created by clone:
+    
+    sudo pip3 install -r requirements.txt
+    python3 flask_main.py
+
+###To add admin to the site:
+    python3 flask_main.py adminsetup
+This will take your ADMIN\_ID and ADMIN\_PW and create a valid login for the admin tools on the site.
+To update password, just use an existing ADMIN\_ID with a new ADMIN\_PW
+
+Depending on need, this can easily be extended to allow for regular user accounts, and creating admins directly on the site.
+We expect a fairly small amount of admin accounts would be created for this application.
