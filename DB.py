@@ -18,7 +18,7 @@ def sorted_list(db, lon, lat):
         records = sorted(records, key=lambda k: k['long_lat'], reverse=True)
 
 def add_image(db, aws_url):
-
+    return
 
 def add_mural(db,name,address,description,image):
     """

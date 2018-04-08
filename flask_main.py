@@ -133,13 +133,13 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "adminsetup":
             #Hash admin password
-			b_pw = ADMIN_PW.encode('UTF-8') #string needs to be in form: b'string'
-			hashed = bcrypt.hashpw(b_pw, bcrypt.gensalt())
-			if bcrypt.checkpw(b_pw, hashed): #TODO delete this if/else
-				print('password hashed successfully')
-			else:
-				print('password hash error!!!')
-			#Setup admin in database
+            b_pw = ADMIN_PW.encode('UTF-8') #string needs to be in form: b'string'
+            hashed = bcrypt.hashpw(b_pw, bcrypt.gensalt())
+            if bcrypt.checkpw(b_pw, hashed): #TODO delete this if/else
+                print('password hashed successfully')
+            else:
+                print('password hash error!!!')
+            #Setup admin in database
             admin = db.Admin.find_one_and_update({"admin_id": ADMIN_ID},{'$set' :{ "admin_pw": hashed}})
             if admin is None:
                 db.Admin.insert_one({'admin_id': ADMIN_ID, 'admin_pw' : hashed})
