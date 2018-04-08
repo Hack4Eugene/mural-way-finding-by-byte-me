@@ -32,7 +32,9 @@ app.secret_key = str(uuid.uuid4())
 def index():
     if 'admin_status' not in flask.session:
         flask.session['admin_status'] = False
-        
+    if 'manage' not in flask.session:
+		flask.session['manage'] = False
+		
     app.logger.debug("Main page entry")
     data = DB.sorted_list(db)
     app.logger.debug(len(data))
