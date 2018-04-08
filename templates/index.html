@@ -20,9 +20,14 @@
     </div>
 		<a href="submit_mural"><button id="submit" src="/submit_mural">Submit Mural</button></a>
 
+		<a href="admin"><button id="submit3" src="/admin">submit3</button></a><br><br>
+
 		{% for mural in mural_data %}
-		<img src=mural.source alt="User Image">
+		
+		<img src={{mural.img_id}} alt="User Image">
+		<br>
 		{% endfor %}
+
 		<a href="admin"><button id="submit" src="/admin">Admin Login</button></a>
 
 
