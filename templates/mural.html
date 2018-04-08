@@ -7,6 +7,11 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
 	<body>
+		<p id="top"></p>
+        <div class="topnav" id="myTopnav">
+      <a href="#home" class="active" onclick="goHome()">Mural Wayfinder</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+    </div>
 		<img src="{{ link }}" alt="User Image">
 		<div><h1>{{title}}</h1></div>
 
@@ -16,7 +21,9 @@
 		<button id="google-maps">
 
 		<script>
-			//GET MURAL NAME
+			             function goHome(){
+              location.href = "/";
+             }
 		</script>
 	</body>
 </html>
