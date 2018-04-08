@@ -28,7 +28,7 @@ app.secret_key = str(uuid.uuid4())
 ###
 
 @app.route("/")
-@app.route("/index")
+@app.route("/index" methods = ["GET", "POST"])
 def index():
     if 'admin_status' not in flask.session:
         flask.session['admin_status'] = False
@@ -158,7 +158,7 @@ def manage():
     
     """
     flask.session["manage"] = True
-    return flask.render_template("index.html")
+    r    return render_template('index.html', mural_data=data)
     
 @app.route("/review", methods = ['POST'])
 def review():
