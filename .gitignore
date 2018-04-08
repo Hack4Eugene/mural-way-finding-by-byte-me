@@ -5,6 +5,7 @@ secrets/admin_secrets.py
 __pycache__/
 *.py[cod]
 credentials.ini
+.idea/
 
 # C extensions
 *.so
