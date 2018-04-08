@@ -22,13 +22,18 @@
 			<a href="submit_mural"><button id="submit" src="/submit_mural">Submit Mural</button></a>
 			<a href="admin"><button id="submit" src="/admin">Admin Login</button></a><br>
 		</div>
-
-		{% for mural in mural_data %}
-		
-		<img src={{mural.img_id}} alt="User Image" id="{{mural.img_id}}"  onClick="ja_rule(this.id)" style="border: none; width: 100%;">
-		<br>
-		{% endfor %}
-		
+		<form method=POST action="{{ url_for('delete') }}">
+			<input type ="submit" value="delete selected" style="float:right;margin-right:5%">
+			{% for mural in mural_data %}
+			<div class="mural">
+				<div id="mural_header">
+					<label><input type="checkbox" name="check{{loop.index}}" value="{{mural.img_id}}">Delete Me</label>
+				</div>
+				<img src={{mural.img_id}} alt="User Image" id="{{mural.img_id}}"  onClick="ja_rule(this.id)" style="border: none; width: 100%;">
+				<br>
+			</div>
+			{% endfor %}
+		</form>
 
 
 		<script type="text/javascript">

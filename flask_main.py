@@ -192,6 +192,27 @@ def ja():
     return flask.jsonify(result=rslt)
 
 
+@app.route("/delete",methods=["POST"])
+def delete():
+    # update_db.delete_from_db(db,request)
+    print("=======================================")
+    checked_murals = []
+    form = request.form
+    print(db["Mural"].count())
+    # print(request.form.get("check1"))
+    for i in range(1,db["Mural"].count()+1):
+        try:
+            aws_url = form["check{}".format(i)]
+            checked_murals.append(aws_url)
+        except:
+            pass
+
+    print(checked_murals)
+    for mural in checked_murals:
+        db["Mural"].remove({"img_id":mural})
+    print("=======================================")
+    return flask.redirect(url_for("index"))
+    return None
 
 @app.route("/_get_images")
 def get_images():
