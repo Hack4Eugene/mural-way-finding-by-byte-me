@@ -150,8 +150,6 @@ def logout():
     flask.session["admin_status"] = False
     return flask.redirect(flask.url_for("index"))
 
-@app.route("/")
-
 @app.route("/create")
 def create():
     app.logger.debug("Create")
